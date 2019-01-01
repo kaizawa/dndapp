@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Character Detail</title>
+</head>
+<body>
+
+<form action="#" th:action="@{/chara_edit}" method="GET">
+	<table>
+		<tr><td>Name</td><td><input id="input1" name="name" type="text" size="40" value="" th:value="${name}"/></td></tr>
+		<tr><td>Class</td><td><input id="input2" name="klass" type="text" size="40" value="" th:value="${klass}"/></td></tr>
+	</table>
+	<input type="submit" value="Save">
+</form>
+
+<a href="" th:href=@{/}>Top</a>
+    
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Characters</title>
+</head>
+<body>
+
+    <table>
+      <tr>
+        <th>NAME</th>
+        <th>CLASS</th>
+        <th></th>
+      </tr>
+      <tr th:each="chara : ${charas}">
+        <td th:text="${chara.name}"/>
+        <td th:text="${chara.klass}"/>
+        <td ><a href="chara_detail.html" th:href=@{/chara_edit(name=${chara.name},klass=${chara.klass})}>edit</a></td>
+      </tr>
+    </table>
+
+	<a href="place_holder.html" th:href=@{/chara_edit}>new</a>
+
+</body>
+</html>
