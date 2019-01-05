@@ -1,0 +1,12 @@
+.table-no-border {
+  width: 100%;
+  margin-bottom: 0rem;
+  background-color: transparent;
+}
+
+.table-no-border th,
+.table-no-border td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 0px
+}

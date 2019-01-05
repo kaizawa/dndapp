@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.cafeform.dndapp</groupId>
 	<artifactId>dndapp</artifactId>
-	<version>14</version>
+	<version>15</version>
 	<packaging>war</packaging>
 	<name>dndapp</name>
 	<description>D&amp;D 5 Tools</description>

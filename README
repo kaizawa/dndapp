@@ -13,3 +13,46 @@ $ mvn appengine:deploy
 
 Show log
 $ gcloud app logs tail
+
+Spring Frame work Book 
+https://books.google.co.jp/books?id=7TesDAAAQBAJ&printsec=frontcover&hl=ja&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false
+P34 @SessionAttribute
+
+acrobatics
+animal
+arcana
+athletics
+deception
+history
+intimidation
+insight
+investigation
+medicine
+nature
+performance
+perception
+persuasion
+religion
+sleight
+stealth
+survival
+
+s_acrobatics
+s_animal
+s_arcana
+s_athletics
+s_deception
+s_history
+s_intimidation
+s_insight
+s_investigation
+s_medicine
+s_nature
+s_performance
+s_perception
+s_persuasion
+s_religion
+s_sleight
+s_stealth
+s_survival
+
