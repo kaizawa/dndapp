@@ -14,7 +14,7 @@ public class PlayerChara extends CharaBase implements Serializable {
     
     private String _player = "";
     private String _race = "";
-    private String _alighment = "";
+    private String _alignment = "";
     private Integer _experience = 0;
 
     private Integer _strength = 10;
@@ -321,12 +321,12 @@ public class PlayerChara extends CharaBase implements Serializable {
         _race = race;
     }
 
-    public String getAlighment() {
-        return _alighment;
+    public String getAlignment() {
+        return _alignment;
     }
 
-    public void setAlighment(String alighment) {
-        _alighment = alighment;
+    public void setAlignment(String alignment) {
+        _alignment = alignment;
     }
 
     public Integer getExperience() {

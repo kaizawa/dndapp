@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Character Detail</title>
+<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>D&amp;D 5版 キャラクターシート(印刷ページ)</h1>
+
+      <p th:if="${validationError}" th:text="${validationError}">validation
+        error</p>
+      <p th:if="${errorMessage}" th:text="${errorMessage}">error
+        message</p>
+    </div>
+
+    <div class="small" th:object="${playerChara}">
+
+      <table class="table table-no-border">
+        <tr>
+          <td id="header">
+            <table class="table ">
+              <tr>
+                <td><a href="" th:href=@{/}>キャラクターリストへ戻る</a></td>
+                <td><a href="/" th:href=@{/chara_edit(charaKey=*{charaKey})}>編集する</a></td>                
+              </tr>
+              <tr>
+                <td id="name"><label class="control-label">キャラクター名</label>
+                  <p th:text="*{name}" class="value" /></td>
+                <td>
+                  <table class="table ">
+                    <tr>
+                      <td><label class="control-label">クラス</label>
+                        <p class="value" th:value="*{klass}" /></td>
+                      <td><label class="control-label">レベル</label>
+                        <p class="value" th:text="*{level}" /></td>
+                      <td><label class="control-label">プレイヤー</label>
+                        <p class="value" th:text="*{player}" /></td>
+                    </tr>
+                    <tr>
+                      <td><label class="control-label">種族</label>
+                        <p class="value" th:text="*{race}" /></td>
+                      <td><label class="control-label">属性</label>
+                        <p class="value" th:text="*{alignment}" /></td>
+                      <td><label class="control-label">経験値</label>
+                        <p class="value" th:text="*{experience}" /></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td id="main body">
+            <table class="table">
+              <tr>
+                <td id="left">
+                  <table class="table">
+                    <tr>
+                      <td id="ability and skill">
+                        <table class="table">
+                          <tr>
+                            <td id="ability">
+                              <table class="table"
+                                style="text-align: center">
+                                <tr>
+                                  <td id="str"><label
+                                    class="control-label">【筋力】</label>
+                                    <p class="value"
+                                      th:text="*{strength}" /> <span
+                                    th:text="*{strength_bonus} &gt; 0? '(+' + *{strength_bonus} + ')':  '(' + *{strength_bonus} + ')'"></span></td>
+                                </tr>
+                                <tr>
+                                  <td id="dex"><label
+                                    class="control-label">【敏捷力】</label>
+                                    <p class="value"
+                                      th:text="*{dexterity}" /> <span
+                                    th:text="*{dexterity_bonus} &gt; 0? '(+' + *{dexterity_bonus} + ')':  '(' + *{dexterity_bonus} + ')'"></span></td>
+                                </tr>
+                                <tr>
+                                  <td id="con"><label
+                                    class="control-label">【耐久力】</label>
+                                    <p class="value"
+                                      th:text="*{constitution}" /> <span
+                                    th:text="*{constitution_bonus} &gt; 0? '(+' + *{constitution_bonus} + ')':  '(' + *{constitution_bonus} + ')'"></span></td>
+                                </tr>
+                                <tr>
+                                  <td id="int"><label
+                                    class="control-label">【知力】</label>
+                                    <p class="value"
+                                      th:text="*{intelligence}" /> <span
+                                    th:text="*{intelligence_bonus} &gt; 0? '(+' + *{intelligence_bonus} + ')':  '(' + *{intelligence_bonus} + ')'"></span></td>
+                                </tr>
+                                <tr>
+                                  <td id="wis"><label
+                                    class="control-label">【判断力】</label>
+                                    <p class="value" th:text="*{wisdom}" />
+                                    <span
+                                    th:text="*{wisdom_bonus} &gt; 0? '(+' + *{wisdom_bonus} + ')':  '(' + *{wisdom_bonus} + ')'"></span></td>
+                                </tr>
+                                <tr>
+                                  <td id="char"><label
+                                    class="control-label">【魅力】</label>
+                                    <p class="value"
+                                      th:text="*{charisma}" /> <span
+                                    th:text="*{charisma_bonus} &gt; 0? '(+' + *{charisma_bonus} + ')':  '(' + *{charisma_bonus} + ')'"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+
+                            <td id="skill and other">
+                              <table class="table">
+                                <tr>
+                                  <td id="inspiration">
+                                  <span th:text="*{inspiration} == 'on'? '■' : '□'"/></span>
+                                    インスピレーション</td>
+                                </tr>
+                                <tr>
+                                  <td id="proficiency bonus">
+                                    <table>
+                                      <tr>
+                                        <td>
+                                          <label class="control-label">習熟ボーナス</label>                                        
+                                          <p class="value" th:text="*{proficiency_bonus} &gt; 0? '+' + *{proficiency_bonus} :  *{proficiency_bonus}"/>
+                                        </td>
+
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td id="saving throw"><label>セーヴ</label>
+                                    <table
+                                      class="table table-sm table-bordered ">
+                                      <tr>
+                                        <td>
+                                          <span th:text="*{strength_save} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{strength_save_bonus} &gt; 0? '+' + *{strength_save_bonus} :  *{strength_save_bonus}">
+                                        </span>【筋力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td> <span th:text="*{dexterity_save} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{dexterity_save_bonus} &gt; 0? '+' + *{dexterity_save_bonus} :  *{dexterity_save_bonus}">
+                                        </span>【敏捷力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{constitution_save} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{constitution_save_bonus} &gt; 0? '+' + *{constitution_save_bonus} :  *{constitution_save_bonus}">
+                                        </span>【耐久力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{intelligence_save} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{intelligence_save_bonus} &gt; 0? '+' + *{intelligence_save_bonus} :  *{intelligence_save_bonus}">
+                                        </span>【知力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{wisdom_save} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{wisdom_save_bonus} &gt; 0? '+' + *{wisdom_save_bonus} :  *{wisdom_save_bonus}">
+                                        </span>【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{charisma_save} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{charisma_save_bonus} &gt; 0? '+' + *{charisma_save_bonus} :  *{charisma_save_bonus}">
+                                        </span>【魅力】</td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                                <tr>
+                                  <td id="skill"><label>技能</label>
+                                    <table
+                                      class="table table-sm table-bordered ">
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{intimidation} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{intimidation_bonus} &gt; 0? '+' + *{intimidation_bonus} :  *{intimidation_bonus}">
+                                        </span>&lt;威圧&gt;【魅力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{medicine} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{medicine_bonus} &gt; 0? '+' + *{medicine_bonus} :  *{medicine_bonus}">
+                                        </span>&lt;医術&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{athletics} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{athletics_bonus} &gt; 0? '+' + *{athletics_bonus} :  *{athletics_bonus}">
+                                        </span>&lt;運動&gt;【筋力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{stealth} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{stealth_bonus} &gt; 0? '+' + *{stealth_bonus} :  *{stealth_bonus}">
+                                        </span>&lt;隠密&gt;【敏捷力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{acrobatics} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{acrobatics_bonus} &gt; 0? '+' + *{acrobatics_bonus} :  *{acrobatics_bonus}">
+                                        </span>&lt;軽業&gt;【敏捷力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{insight} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{insight_bonus} &gt; 0? '+' + *{insight_bonus} :  *{insight_bonus}">
+                                        </span>&lt;看破&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{performance} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{performance_bonus} &gt; 0? '+' + *{performance_bonus} :  *{performance_bonus}">
+                                        </span>&lt;芸能&gt;【魅力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{nature} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{nature_bonus} &gt; 0? '+' + *{nature_bonus} :  *{nature_bonus}">
+                                        </span>&lt;自然&gt;【知力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{nature} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{religion_bonus} &gt; 0? '+' + *{religion_bonus} :  *{religion_bonus}">
+                                        </span>&lt;宗教&gt;【知力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{survival} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{survival_bonus} &gt; 0? '+' + *{survival_bonus} :  *{survival_bonus}">
+                                        </span>&lt;生存&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{persuasion} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{persuasion_bonus} &gt; 0? '+' + *{persuasion_bonus} :  *{persuasion_bonus}">
+                                        </span>&lt;説得&gt;【魅力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{investigation} == 'on'? '■' : '□'"/></span>
+                                          <span
+                                          th:text="*{investigation_bonus} &gt; 0? '+' + *{investigation_bonus} :  *{investigation_bonus}">
+                                        </span>&lt;捜査&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{perception} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{perception_bonus} &gt; 0? '+' + *{perception_bonus} :  *{perception_bonus}">
+                                        </span>&lt;知覚&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{sleight} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{sleight_bonus} &gt; 0? '+' + *{sleight_bonus} :  *{sleight_bonus}">
+                                        </span>&lt;手先の早業&gt;【敏捷力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                        <span th:text="*{animal} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{animal_bonus} &gt; 0? '+' + *{animal_bonus} :  *{animal_bonus}">
+                                        </span>&lt;動物使い&gt;【判断力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{deception} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{deception_bonus} &gt; 0? '+' + *{deception_bonus} :  *{deception_bonus}">
+                                        </span>&lt;ペテン&gt;【魅力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{arcana} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{arcana_bonus} &gt; 0? '+' + *{arcana_bonus} :  *{arcana_bonus}">
+                                        </span>&lt;魔法学&gt;【知力】</td>
+                                      </tr>
+                                      <tr>
+                                        <td><span th:text="*{history} == 'on'? '■' : '□'"/></span>
+                                        <span
+                                          th:text="*{history_bonus} &gt; 0? '+' + *{history_bonus} :  *{history_bonus}">
+                                        </span>&lt;歴史&gt;【知力】</td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td id="passive value">
+                        <table class="table">
+                          <tr>
+                            <td>
+                            <label class="control-label">受動【判断力】&lt;知覚&gt;値</label>
+                            <p class="value" th:text="*{passive_wisdom_perception}"/></td>                            
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td id="other proficiency and language"><label>その他の習熟と言語</label>
+                        <span class="value"
+                        th:text="*{proficiency_language}"></span></td>
+                    </tr>
+                  </table>
+                </td>
+
+                <td id="center">
+                  <table class="table">
+                    <tr>
+                      <td>
+                        <table class="table">
+                          <tr>
+                            <td><label class="control-label">AC</label>
+                              <p class="value"
+                                style="text-align: center"
+                                th:text="*{ac}" /></td>
+                            <td><label class="control-label">イニシアチブ</label>
+                              <p class="value"
+                                style="text-align: center"
+                                th:text="*{initiative}" /></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <table class="table">
+                          <tr>
+                            <td><label class="control-label">移動速度</label>
+                              <p class="value"
+                                style="text-align: center"
+                                th:text="*{speed}" /></td>
+                            <td><label class="control-label">ヒットダイス</label>
+                              <p class="value" th:text="*{hit_dice}" />
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>攻撃&amp;呪文発動 <span
+                        style="min-height: 600px;" class="value"
+                        th:text="*{attack_spellcasting}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>装備 <span class="value"
+                        style="min-height: 640px;"
+                        th:text="*{equipment}"></span></td>
+                    </tr>
+                  </table>
+                </td>
+                <td id="right">
+                  <table class="table">
+                    <tr>
+                      <td>人間的特徴<span class="value"
+                        th:text="*{personality_traits}"
+                        style="min-height: 150px;"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>尊ぶもの<span class="value"
+                        th:text="*{ideals}" style="min-height: 150px;"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>関わりの深いもの<span class="value"
+                        th:text="*{bonds}" style="min-height: 150px;"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>弱み<span class="value"
+                        th:text="*{flaws}" style="min-height: 150px;"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>特徴<span class="value"
+                        th:text="*{features_traits}"
+                        style="min-height: 770px;"></span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table">
+              <tr>
+                <td><label class="control-label">呪文発動クラス</label>
+                  <p class="value" th:value="*{spellcasting_class}" /></td>
+                <td><label class="control-label">呪文発動能力値</label>
+                  <p class="value" th:text="*{spellcasting_ability}" />
+                </td>
+                <td><label class="control-label">呪文セーヴ難易度</label>
+                  <p class="value" th:text="*{spell_save_dc}" /></td>
+                <td><label class="control-label">呪文攻撃ボーナス</label>
+                  <p class="value" th:value="*{spell_attack_bonus}" /></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td id="header2">
+            <table class="table">
+              <tr>
+                <td>身体的特徴</td>
+                <td>
+                  <table class="table">
+                    <tr>
+                      <td><label class="control-label">年齢</label>
+                        <p class="value" th:text="*{age}" /></td>
+                      <td><label class="control-label">身長</label>
+                        <p class="value" th:text="*{height}" /></td>
+                      <td><label class="control-label">体重</label>
+                        <p class="value" th:text="*{weight}" /></td>
+                    </tr>
+                    <tr>
+                      <td><label class="control-label">目</label>
+                        <p class="value" th:text="*{eyes}" /></td>
+                      <td><label class="control-label">肌</label>
+                        <p class="value" th:text="*{skin}" /></td>
+                      <td><label class="control-label">髪</label>
+                        <p class="value" th:text="*{hair}" /></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <table class="table table-no-border">
+        <tr>
+          <td class="text-right"><form action="#"
+              th:action="@{/chara_delete}" th:object="${playerChara}"
+              method="GET"></form></td>
+        </tr>
+      </table>
+      <a href="" th:href=@{/}>キャラクターリストへ戻る</a>
+    </div>
+  </div>
+</body>
+</html>

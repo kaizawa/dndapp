@@ -16,7 +16,7 @@ public interface Chara {
 
     public String getRace();
 
-    public String getAlighment();
+    public String getAlignment();
 
     public Integer getExperience();
 

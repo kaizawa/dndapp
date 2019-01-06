@@ -55,6 +55,28 @@ public class CharaController {
 	return "chara_list";
     }
     
+    @RequestMapping(value = "/chara_view", method = RequestMethod.GET)
+    public String view(	
+		    Model model,
+		    PlayerChara chara,
+		    @ModelAttribute("charaKey") String charaKey) 
+	    
+    {
+	Entity charaData;
+
+	try {
+	    charaData = _datastore.get(KeyFactory.stringToKey(charaKey));
+	} catch (EntityNotFoundException e) {
+	    // TODO print error on page
+	    return "chara_view";
+	}
+
+	updatePlayerChara(chara, charaData);
+
+	return "chara_view";
+    }
+
+    
     Entity getCharaData(String charaKey) throws EntityNotFoundException 
     {	
 	try {
@@ -82,7 +104,7 @@ public class CharaController {
 	chara.setLevel(getIntProperty(charaData, LEVEL));
 	chara.setPlayer(getStrProperty(charaData, PLAYER));
 	chara.setRace(getStrProperty(charaData, RACE));
-	chara.setAlighment(getStrProperty(charaData, ALIGNMENT));
+	chara.setAlignment(getStrProperty(charaData, ALIGNMENT));
 	chara.setExperience(getIntProperty(charaData, EXPERIENCE));
 	
 	chara.setStrength(getIntProperty(charaData, STR));
@@ -186,7 +208,7 @@ public class CharaController {
 	charaData.setProperty(LEVEL, chara.getLevel());
 	charaData.setProperty(PLAYER, chara.getPlayer());
 	charaData.setProperty(RACE, chara.getRace());
-	charaData.setProperty(ALIGNMENT, chara.getAlighment());
+	charaData.setProperty(ALIGNMENT, chara.getAlignment());
 	charaData.setProperty(EXPERIENCE, chara.getExperience());	
 	
 	charaData.setProperty(STR, chara.getStrength());
@@ -263,6 +285,7 @@ public class CharaController {
 	updateCharaData(charaData, chara);
 
 	_datastore.put(charaData);
+	chara.setCharaKey( KeyFactory.keyToString(charaData.getKey()));
 
 	return "chara_edit";
     }
