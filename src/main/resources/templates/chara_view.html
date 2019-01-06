@@ -322,7 +322,7 @@
                     <tr>
                       <td id="other proficiency and language"><label>その他の習熟と言語</label>
                         <span class="value"
-                        th:text="*{proficiency_language}"></span></td>
+                        th:utext="*{proficiency_language_view}"></span></td>
                     </tr>
                   </table>
                 </td>
@@ -361,15 +361,15 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>攻撃&amp;呪文発動 <span
+                      <td>攻撃&amp;呪文発動 <p
                         style="min-height: 600px;" class="value"
-                        th:text="*{attack_spellcasting}"></span>
+                        th:utext="*{attack_spellcasting_view}"/>
                       </td>
-                    </tr>
                     <tr>
-                      <td>装備 <span class="value"
-                        style="min-height: 640px;"
-                        th:text="*{equipment}"></span></td>
+                      <td>装備 <p
+                        style="min-height: 640px;" class="value"
+                        th:utext="*{equipment_view}">
+                      </td>
                     </tr>
                   </table>
                 </td>
@@ -377,28 +377,28 @@
                   <table class="table">
                     <tr>
                       <td>人間的特徴<span class="value"
-                        th:text="*{personality_traits}"
+                        th:utext="*{personality_traits_view}"
                         style="min-height: 150px;"></span>
                       </td>
                     </tr>
                     <tr>
                       <td>尊ぶもの<span class="value"
-                        th:text="*{ideals}" style="min-height: 150px;"></span>
+                        th:utext="*{ideals_view}" style="min-height: 150px;"></span>
                       </td>
                     </tr>
                     <tr>
                       <td>関わりの深いもの<span class="value"
-                        th:text="*{bonds}" style="min-height: 150px;"></span>
+                        th:utext="*{bonds_view}" style="min-height: 150px;"></span>
                       </td>
                     </tr>
                     <tr>
                       <td>弱み<span class="value"
-                        th:text="*{flaws}" style="min-height: 150px;"></span>
+                        th:utext="*{flaws_view}" style="min-height: 150px;"></span>
                       </td>
                     </tr>
                     <tr>
                       <td>特徴<span class="value"
-                        th:text="*{features_traits}"
+                        th:utext="*{features_traits_view}"
                         style="min-height: 770px;"></span>
                       </td>
                     </tr>
@@ -413,7 +413,7 @@
             <table class="table">
               <tr>
                 <td><label class="control-label">呪文発動クラス</label>
-                  <p class="value" th:value="*{spellcasting_class}" /></td>
+                  <p class="value" th:text="*{spellcasting_class}" /></td>
                 <td><label class="control-label">呪文発動能力値</label>
                   <p class="value" th:text="*{spellcasting_ability}" />
                 </td>

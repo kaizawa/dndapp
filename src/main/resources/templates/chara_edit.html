@@ -549,12 +549,12 @@
                     <select class="form-control"
                     name="spellcasting_ability">
                       <option value="">---</option>
-                      <option th:value="intelligence" th:text="知力"
-                        th:selected="'intelligence' == *{spellcasting_ability}"></option>
-                      <option th:value="wisdom" th:text="判断力"
-                        th:selected="'wisdom' == *{spellcasting_ability}"></option>
-                      <option th:value="charisma" th:text="魅力"
-                        th:selected="'charisma' == *{spellcasting_ability}"></option>
+                      <option th:value="知力" th:text="知力"
+                        th:selected="'知力' == *{spellcasting_ability}"></option>
+                      <option th:value="判断力" th:text="判断力"
+                        th:selected="'判断力' == *{spellcasting_ability}"></option>
+                      <option th:value="魅力" th:text="魅力"
+                        th:selected="'魅力' == *{spellcasting_ability}"></option>
                   </select></td>
                   <td><label class="control-label">呪文セーヴ難易度</label>
                     <input class="form-control" name="spell_save_dc"

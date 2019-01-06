@@ -396,6 +396,10 @@ public class PlayerChara extends CharaBase implements Serializable {
     public String getProficiency_language() {
         return _proficiency_language;
     }
+    
+    public String getProficiency_language_view() {
+        return newLineToBr(_proficiency_language);
+    }
 
     public void setProficiency_language(String proficiency_language) {
         _proficiency_language = proficiency_language;
@@ -436,6 +440,10 @@ public class PlayerChara extends CharaBase implements Serializable {
     public String getAttack_spellcasting() {
         return _attach_spellcasting;
     }
+    
+    public String getAttack_spellcasting_view() {
+        return newLineToBr(_attach_spellcasting);
+    }
 
     public void setAttack_spellcasting(String attach_spellcasting) {
         _attach_spellcasting = attach_spellcasting;
@@ -443,6 +451,10 @@ public class PlayerChara extends CharaBase implements Serializable {
 
     public String getEquipment() {
         return _equipment;
+    }
+    
+    public String getEquipment_view() {
+        return newLineToBr(_equipment);
     }
 
     public void setEquipment(String equipment) {
@@ -452,6 +464,10 @@ public class PlayerChara extends CharaBase implements Serializable {
     public String getPersonality_traits() {
         return _personality_traits;
     }
+    
+    public String getPersonality_traits_view() {
+        return newLineToBr(_personality_traits);
+    }
 
     public void setPersonality_traits(String personality_traits) {
         _personality_traits = personality_traits;
@@ -459,6 +475,10 @@ public class PlayerChara extends CharaBase implements Serializable {
 
     public String getIdeals() {
         return _ideals;
+    }
+    
+    public String getIdeals_view() {
+        return newLineToBr(_ideals);
     }
 
     public void setIdeals(String ideals) {
@@ -468,13 +488,21 @@ public class PlayerChara extends CharaBase implements Serializable {
     public String getBonds() {
         return _bonds;
     }
-
+    
+    public String getBonds_view() {
+        return newLineToBr(_bonds);
+    }
+    
     public void setBonds(String bonds) {
         _bonds = bonds;
     }
 
     public String getFlaws() {
         return _flaws;
+    }
+    
+    public String getFlaws_view() {
+        return newLineToBr(_flaws);
     }
 
     public void setFlaws(String flaws) {
@@ -483,6 +511,10 @@ public class PlayerChara extends CharaBase implements Serializable {
 
     public String getFeatures_traits() {
         return _features_traits;
+    }
+    
+    public String getFeatures_traits_view() {
+        return newLineToBr(_features_traits);
     }
 
     public void setFeatures_traits(String features_traits) {
@@ -552,5 +584,9 @@ public class PlayerChara extends CharaBase implements Serializable {
     public void setSpellcasting_class(String spellcasting_class) {
         _spellcasting_class = spellcasting_class;
     }
-
+    
+    private String newLineToBr(String text) 
+    {
+	return text.replaceAll("\n", "<br/>");	
+    }
 }
