@@ -49,6 +49,7 @@ public class Constants {
     public static final String INITIATIVE = "initiative";
     public static final String SPEED = "speed";
     public static final String HIT_DICE = "hit_dice";
+    public static final String HIT_POINT = "hit_point";
     public static final String ATTACK_SPELLCASTING = "attach_spellcasting";
     public static final String EQUIPMENT = "equipment";
     public static final String PERSONALITY_TRAITS = "personality_traits";

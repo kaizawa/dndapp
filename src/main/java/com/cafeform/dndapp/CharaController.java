@@ -110,8 +110,8 @@ public class CharaController {
 	chara.setStrength(getIntProperty(charaData, STR));
 	chara.setDexterity(getIntProperty(charaData, DEX));
 	chara.setConstitution(getIntProperty(charaData, CON));
-	chara.setIntelligence(getIntProperty(charaData, WIS));
-	chara.setWisdom(getIntProperty(charaData, INT));
+	chara.setIntelligence(getIntProperty(charaData, INT));
+	chara.setWisdom(getIntProperty(charaData, WIS));
 	chara.setCharisma(getIntProperty(charaData, CHA));
 	
 	chara.setInspiration(getStrProperty(charaData, INSPIRATION));
@@ -119,8 +119,8 @@ public class CharaController {
 	chara.setStrength_save(getStrProperty(charaData, STR+SAVE));
 	chara.setDexterity_save(getStrProperty(charaData, DEX+SAVE));
 	chara.setConstitution_save(getStrProperty(charaData, CON+SAVE));
-	chara.setIntelligence_save(getStrProperty(charaData, WIS+SAVE));
-	chara.setWisdom_save(getStrProperty(charaData, INT+SAVE));
+	chara.setIntelligence_save(getStrProperty(charaData, INT+SAVE));
+	chara.setWisdom_save(getStrProperty(charaData, WIS+SAVE));
 	chara.setCharisma_save(getStrProperty(charaData, CHA+SAVE));
 	
 	chara.setAcrobatics(getStrProperty(charaData, ACROBATICS));
@@ -147,6 +147,7 @@ public class CharaController {
 	chara.setInitiative(getIntProperty(charaData, INITIATIVE));
 	chara.setSpeed(getIntProperty(charaData, SPEED));
 	chara.setHit_dice(getStrProperty(charaData, HIT_DICE));
+	chara.setHit_point(getIntProperty(charaData, HIT_POINT));
 	chara.setAttack_spellcasting(getStrProperty(charaData, ATTACK_SPELLCASTING));
 	chara.setEquipment(getStrProperty(charaData, EQUIPMENT));
 	chara.setPersonality_traits(getStrProperty(charaData, PERSONALITY_TRAITS));
@@ -251,6 +252,7 @@ public class CharaController {
 	charaData.setProperty(INITIATIVE, chara.getInitiative());
 	charaData.setProperty(SPEED, chara.getSpeed());
 	charaData.setProperty(HIT_DICE, chara.getHit_dice());
+	charaData.setProperty(HIT_POINT, chara.getHit_point());
 	charaData.setProperty(ATTACK_SPELLCASTING, chara.getAttack_spellcasting());
 	charaData.setProperty(EQUIPMENT, chara.getEquipment());
 	charaData.setProperty(PERSONALITY_TRAITS, chara.getPersonality_traits());

@@ -36,7 +36,7 @@
                   <table class="table ">
                     <tr>
                       <td><label class="control-label">クラス</label>
-                        <p class="value" th:value="*{klass}" /></td>
+                        <p class="value" th:text="*{klass}" /></td>
                       <td><label class="control-label">レベル</label>
                         <p class="value" th:text="*{level}" /></td>
                       <td><label class="control-label">プレイヤー</label>
@@ -356,7 +356,12 @@
                             <td><label class="control-label">ヒットダイス</label>
                               <p class="value" th:text="*{hit_dice}" />
                             </td>
-                          </tr>
+                            <td><label class="control-label">ヒットポイント</label>
+                                <p class="value" 
+                                style="text-align: center"
+                                th:value="*{hit_point}" />
+                           </td>
+                          </tr>                                
                         </table>
                       </td>
                     </tr>
@@ -420,7 +425,7 @@
                 <td><label class="control-label">呪文セーヴ難易度</label>
                   <p class="value" th:text="*{spell_save_dc}" /></td>
                 <td><label class="control-label">呪文攻撃ボーナス</label>
-                  <p class="value" th:value="*{spell_attack_bonus}" /></td>
+                  <p class="value" th:text="*{spell_attack_bonus}" /></td>
               </tr>
             </table>
           </td>

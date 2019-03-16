@@ -163,6 +163,8 @@ public interface Chara {
     public Integer getSpeed();
 
     public String getHit_dice();
+    
+    public Integer getHit_point();
 
     public String getAttack_spellcasting();
 

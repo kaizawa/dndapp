@@ -57,6 +57,7 @@ public class PlayerChara extends CharaBase implements Serializable {
     private Integer _initiative = 0;
     private Integer _speed = 0;
     private String _hit_dice = "";
+    private Integer _hit_point = 0;
     private String _attach_spellcasting = "";
     private String _equipment = "";
     private String _personality_traits = "";
@@ -432,9 +433,17 @@ public class PlayerChara extends CharaBase implements Serializable {
     public String getHit_dice() {
         return _hit_dice;
     }
-
-    public void setHit_dice(String hit_dice) {
+    
+     public void setHit_dice(String hit_dice) {
         _hit_dice = hit_dice;
+    }
+     
+    public Integer getHit_point() {
+        return _hit_point;
+    }    
+    
+    public void setHit_point(Integer hit_point) {
+        _hit_point = hit_point;
     }
 
     public String getAttack_spellcasting() {

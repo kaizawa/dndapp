@@ -59,20 +59,20 @@
                             <option value="">---</option>
                             <option th:value="秩序にして善" th:text="秩序にして善"
                               th:selected="'秩序にして善' == *{alignment}"></option>
+                            <option th:value="秩序にして中立" th:text="秩序にして中立"
+                              th:selected="'秩序にして中立' == *{alignment}"></option>  
+                            <option th:value="秩序にして悪" th:text="秩序にして悪"
+                              th:selected="'秩序にして悪' == *{alignment}"></option>  
                             <option th:value="中立にして善" th:text="中立にして善"
                               th:selected="'中立にして善' == *{alignment}"></option>
-                            <option th:value="混沌にして善" th:text="混沌にして善"
-                              th:selected="'混沌にして善' == *{alignment}"></option>
-                            <option th:value="中立にして悪" th:text="中立にして悪"
-                              th:selected="'中立にして悪' == *{alignment}"></option>
                             <option th:value="真なる中立" th:text="真なる中立"
-                              th:selected="'真なる中立' == *{alignment}"></option>
+                              th:selected="'真なる中立' == *{alignment}"></option>  
                             <option th:value="中立にして悪" th:text="中立にして悪"
-                              th:selected="'中立にして悪' == *{alignment}"></option>
-                            <option th:value="秩序にして悪" th:text="秩序にして悪"
-                              th:selected="'秩序にして悪' == *{alignment}"></option>
-                            <option th:value="中立にして悪" th:text="中立にして悪"
-                              th:selected="'中立にして悪' == *{alignment}"></option>
+                              th:selected="'中立にして悪' == *{alignment}"></option>                            
+                            <option th:value="混沌にして善" th:text="混沌にして善"
+                              th:selected="'混沌にして善' == *{alignment}"></option>  
+                            <option th:value="混沌にして中立" th:text="混沌にして中立"
+                              th:selected="'混沌にして中立' == *{alignment}"></option>
                             <option th:value="混沌にして悪" th:text="混沌にして悪"
                               th:selected="'混沌にして悪' == *{alignment}"></option>
                         </select></td>
@@ -473,7 +473,12 @@
                                     th:selected="'d10' == *{hit_dice}"></option>
                                   <option th:value="d12" th:text="d12"
                                     th:selected="'d12' == *{hit_dice}"></option>
-                              </select></td>
+                              </select></td>                                                            
+                             <td><label class="control-label">ヒットポイント</label>
+                                <input class="form-control" name="hit_point"
+                                type="text" size=1 value=""
+                                style="text-align: center"
+                                th:value="*{hit_point}" /></td>
                             </tr>
                           </table>
                         </td>
@@ -545,7 +550,7 @@
                     <input class="form-control"
                     name="spellcasting_class" type="text" value=""
                     th:value="*{spellcasting_class}" /></td>
-                  <td><label class="control-label">呪文発動能力値</label>
+                  <td><label class="control-label">呪文発動能力</label>
                     <select class="form-control"
                     name="spellcasting_ability">
                       <option value="">---</option>
@@ -557,12 +562,11 @@
                         th:selected="'魅力' == *{spellcasting_ability}"></option>
                   </select></td>
                   <td><label class="control-label">呪文セーヴ難易度</label>
-                    <input class="form-control" name="spell_save_dc"
-                    type="text" value="" th:value="*{spell_save_dc}" /></td>
+	                  <p class="value" th:text="*{spell_save_dc}" />
+                  </td>
                   <td><label class="control-label">呪文攻撃ボーナス</label>
-                    <input class="form-control"
-                    name="spell_attack_bonus" type="text" value=""
-                    th:value="*{spell_attack_bonus}" /></td>
+                  	 <p class="value" th:text="*{spell_attack_bonus}" />
+                  </td>
                 </tr>
               </table>
             </td>
