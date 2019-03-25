@@ -73,6 +73,9 @@ public class PlayerChara extends CharaBase implements Serializable {
     private String _hair = "";
     private String _spellcasting_ability = "";
     private String _spellcasting_class = "";
+    
+    // this is PlayerChar specific
+    private String _note = "";
 
     public PlayerChara() {
     }
@@ -594,8 +597,17 @@ public class PlayerChara extends CharaBase implements Serializable {
         _spellcasting_class = spellcasting_class;
     }
     
-    private String newLineToBr(String text) 
+
+	private String newLineToBr(String text) 
     {
 	return text.replaceAll("\n", "<br/>");	
     }
+
+	public String getNote() {
+		return _note;
+	}
+
+	public void setNote(String note) {
+		_note = note;
+	}
 }

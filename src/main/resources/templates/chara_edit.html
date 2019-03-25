@@ -10,7 +10,7 @@
 <body>
 
   <div class="container-fluid">
-    <div class="page-header">     
+    <div class="page-header">
       <h1>D&amp;D 5版 キャラクターシート(編集ページ)</h1>
 
       <p th:if="${validationError}" th:text="${validationError}">validation
@@ -22,7 +22,7 @@
     <div class="small">
 
       <form action="#" th:action="@{/chara_save}"
-        th:object="${playerChara}" method="GET">
+        th:object="${playerChara}" method="POST">
         <table class="table table-no-border">
           <tr>
             <td id="header">
@@ -30,7 +30,8 @@
                 <tr>
                   <td><input type="submit" value="保存"></td>
                   <td><a href="" th:href=@{/}>キャラクターリストへ戻る</a></td>
-                  <td><a th:if="*{charaKey} != ''" href="/" th:href=@{/chara_view(charaKey=*{charaKey})}>印刷用画面へ</a></td>                  
+                  <td><a th:if="*{charaKey} != ''" href="/"
+                    th:href=@{/chara_view(charaKey=*{charaKey})}>印刷用画面へ</a></td>
                 </tr>
                 <tr>
                   <td id="name"><label class="control-label"
@@ -60,17 +61,17 @@
                             <option th:value="秩序にして善" th:text="秩序にして善"
                               th:selected="'秩序にして善' == *{alignment}"></option>
                             <option th:value="秩序にして中立" th:text="秩序にして中立"
-                              th:selected="'秩序にして中立' == *{alignment}"></option>  
+                              th:selected="'秩序にして中立' == *{alignment}"></option>
                             <option th:value="秩序にして悪" th:text="秩序にして悪"
-                              th:selected="'秩序にして悪' == *{alignment}"></option>  
+                              th:selected="'秩序にして悪' == *{alignment}"></option>
                             <option th:value="中立にして善" th:text="中立にして善"
                               th:selected="'中立にして善' == *{alignment}"></option>
                             <option th:value="真なる中立" th:text="真なる中立"
-                              th:selected="'真なる中立' == *{alignment}"></option>  
+                              th:selected="'真なる中立' == *{alignment}"></option>
                             <option th:value="中立にして悪" th:text="中立にして悪"
-                              th:selected="'中立にして悪' == *{alignment}"></option>                            
+                              th:selected="'中立にして悪' == *{alignment}"></option>
                             <option th:value="混沌にして善" th:text="混沌にして善"
-                              th:selected="'混沌にして善' == *{alignment}"></option>  
+                              th:selected="'混沌にして善' == *{alignment}"></option>
                             <option th:value="混沌にして中立" th:text="混沌にして中立"
                               th:selected="'混沌にして中立' == *{alignment}"></option>
                             <option th:value="混沌にして悪" th:text="混沌にして悪"
@@ -473,11 +474,11 @@
                                     th:selected="'d10' == *{hit_dice}"></option>
                                   <option th:value="d12" th:text="d12"
                                     th:selected="'d12' == *{hit_dice}"></option>
-                              </select></td>                                                            
-                             <td><label class="control-label">ヒットポイント</label>
-                                <input class="form-control" name="hit_point"
-                                type="text" size=1 value=""
-                                style="text-align: center"
+                              </select></td>
+                              <td><label class="control-label">ヒットポイント</label>
+                                <input class="form-control"
+                                name="hit_point" type="text" size=1
+                                value="" style="text-align: center"
                                 th:value="*{hit_point}" /></td>
                             </tr>
                           </table>
@@ -550,9 +551,8 @@
                     <input class="form-control"
                     name="spellcasting_class" type="text" value=""
                     th:value="*{spellcasting_class}" /></td>
-                  <td><label class="control-label">呪文発動能力</label>
-                    <select class="form-control"
-                    name="spellcasting_ability">
+                  <td><label class="control-label">呪文発動能力</label> <select
+                    class="form-control" name="spellcasting_ability">
                       <option value="">---</option>
                       <option th:value="知力" th:text="知力"
                         th:selected="'知力' == *{spellcasting_ability}"></option>
@@ -562,10 +562,9 @@
                         th:selected="'魅力' == *{spellcasting_ability}"></option>
                   </select></td>
                   <td><label class="control-label">呪文セーヴ難易度</label>
-	                  <p class="value" th:text="*{spell_save_dc}" />
-                  </td>
+                    <p class="value" th:text="*{spell_save_dc}" /></td>
                   <td><label class="control-label">呪文攻撃ボーナス</label>
-                  	 <p class="value" th:text="*{spell_attack_bonus}" />
+                    <p class="value" th:text="*{spell_attack_bonus}" />
                   </td>
                 </tr>
               </table>
@@ -576,6 +575,8 @@
               <table class="table">
                 <tr>
                   <td>身体的特徴</td>
+                </tr>
+                <tr>
                   <td>
                     <table class="table">
                       <tr>
@@ -601,6 +602,13 @@
                           type="text" value="" th:value="*{hair}" /></td>
                       </tr>
                     </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>キャンペーンノート<textarea class="form-control"
+                            name="note"
+                            th:text="*{note}"
+                            style="min-height: 150px;"></textarea>
                   </td>
                 </tr>
               </table>

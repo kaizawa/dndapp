@@ -65,4 +65,6 @@ public class Constants {
     public static final String HAIR = "hair";
     public static final String SPELLCASTING_ABILITY = "spellcasting_ability";   
     public static final String SPELLCASTING_CLASS = "spellcasting_class";
+    
+    public static final String NOTE = "note";
 }
