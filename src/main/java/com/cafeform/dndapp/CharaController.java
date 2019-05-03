@@ -87,7 +87,8 @@ public class CharaController {
 		return "chara_edit";
 	}
 
-	private void updatePlayerChara(PlayerChara chara, Entity charaData) {
+	private void updatePlayerChara(PlayerChara chara, Entity charaData) 
+	{
 		chara.setCharaKey(KeyFactory.keyToString(charaData.getKey()));
 		chara.setName(getStrProperty(charaData, NAME));
 		chara.setKlass(getStrProperty(charaData, KLASS));
@@ -288,5 +289,100 @@ public class CharaController {
 		_datastore.delete(KeyFactory.stringToKey(charaKey));
 
 		return list(model);
+	}
+	
+	@RequestMapping(value = "/campaign_note_list", method = RequestMethod.GET)
+	public String campaign_note_list(Model model) {
+
+		Query q = new Query("CampaignNote").addSort("campaign_name", SortDirection.ASCENDING);
+		PreparedQuery pq = _datastore.prepare(q);
+
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(PAGE_SIZE);
+
+		QueryResultList<Entity> entities;
+		try {
+			entities = pq.asQueryResultList(fetchOptions);
+		} catch (IllegalArgumentException e) {
+			return "campaign_note_list_page";
+		}
+
+		List<CampaignNote> notes = new ArrayList<>();
+		
+		for (Entity entity : entities) {					
+
+			CampaignNote note = new CampaignNote();
+			
+			note.setKey(KeyFactory.keyToString(entity.getKey()));
+			note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
+			note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
+			note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+			
+			notes.add(note);
+		}
+		model.addAttribute("notes", notes);
+		
+		return "campaign_note_list_page";
+	}
+	
+	Entity getCampaignNote(String key) throws EntityNotFoundException {
+		try {
+			return _datastore.get(KeyFactory.stringToKey(key));
+		} catch (IllegalArgumentException e) {
+			return new Entity("CampaignNote");
+		}
+	}
+
+	@RequestMapping("/campaign_note_save")
+	public String campaign_note_save(Model model, @ModelAttribute CampaignNote note) 
+	{
+		Entity entity;
+
+		try {
+			entity = getCampaignNote(note.getKey());
+		} catch (EntityNotFoundException e) {
+			// TODO print error
+			return campaign_note_list(model);
+		}
+
+		entity.setProperty(CAMPAIGN_NAME, note.getCampaign_name());
+		entity.setProperty(CAMPAIGN_NOTE_TITLE, note.getTitle());
+		entity.setProperty(CAMPAIGN_NOTE, new Text(note.getNote()));
+
+		_datastore.put(entity);
+		note.setKey(KeyFactory.keyToString(entity.getKey()));
+
+		return "campaign_note_edit";
+	}
+
+	@RequestMapping("/campaign_note_delete")
+	public String campaign_note_delete(Model model, @ModelAttribute("key") String key) 
+	{
+		_datastore.delete(KeyFactory.stringToKey(key));
+		return campaign_note_list(model);
+	}
+	
+	@RequestMapping("/campaign_note_edit")
+	public String edit(Model model, CampaignNote note, @ModelAttribute("key") String key)
+	{
+		Entity entity;
+
+		try {
+			entity = _datastore.get(KeyFactory.stringToKey(key));
+		} catch (EntityNotFoundException e) {
+			// TODO print error on page
+			return "campaign_note_edit";
+		}
+
+		note.setKey(KeyFactory.keyToString(entity.getKey()));
+		note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
+		note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
+		note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+
+		return "campaign_note_edit";
+	}
+	
+	@RequestMapping("/campaign_note_create")
+	public String campaign_note_create(Model model, CampaignNote note) {
+		return "campaign_note_edit";
 	}
 }
