@@ -29,7 +29,6 @@
 						<th>クラス</th>
                         <th>レベル</th>  
                         <th>プレイヤー</th>
-						<th></th>
                         <th></th>
 					</tr>
 					<tr th:each="chara : ${charas}">
@@ -37,7 +36,6 @@
 						<td th:text="${chara.klass}" /> 
                         <td th:text="${chara.level}" /> 
                         <td th:text="${chara.player}" />        
-                        <td><a href="/" th:href="@{/chara_view(charaKey=${chara.charaKey})}">印刷用</a></td>                                        
 						<td><a href="/" th:href="@{/chara_delete(charaKey=${chara.charaKey})}">削除</a></td>
 					</tr>
 				</table>

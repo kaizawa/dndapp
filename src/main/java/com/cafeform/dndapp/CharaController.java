@@ -154,7 +154,7 @@ public class CharaController {
 		chara.setHair(getStrProperty(charaData, HAIR));
 		chara.setSpellcasting_ability(getStrProperty(charaData, SPELLCASTING_ABILITY));
 		chara.setSpellcasting_class(getStrProperty(charaData, SPELLCASTING_CLASS));
-		
+		chara.setSpell_note(getStrProperty(charaData, SPELL_NOTE));		
 		chara.setNote(getStrProperty(charaData, NOTE));
 	}
 
@@ -259,6 +259,7 @@ public class CharaController {
 		charaData.setProperty(HAIR, chara.getHair());
 		charaData.setProperty(SPELLCASTING_ABILITY, chara.getSpellcasting_ability());
 		charaData.setProperty(SPELLCASTING_CLASS, chara.getSpellcasting_class());
+		charaData.setProperty(SPELL_NOTE, new Text(chara.getSpell_note()));
 		
 		charaData.setProperty(NOTE, new Text(chara.getNote()));
 	}

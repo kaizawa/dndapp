@@ -199,4 +199,6 @@ public interface Chara {
     public Integer getSpell_attack_bonus();
 
     public String getSpellcasting_class();
+    
+    public String getSpell_note();
 }
