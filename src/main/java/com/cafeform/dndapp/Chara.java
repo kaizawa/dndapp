@@ -201,4 +201,7 @@ public interface Chara {
     public String getSpellcasting_class();
     
     public String getSpell_note();
+    
+    // for administrative
+    public Boolean isDeleted();
 }

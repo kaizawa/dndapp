@@ -71,4 +71,6 @@ public class Constants {
     public static final String CAMPAIGN_NAME = "campaign_name";
     public static final String CAMPAIGN_NOTE_TITLE = "campaign_note_title";
     public static final String CAMPAIGN_NOTE = "campaign_note"; 
+    
+    public static final String DELETED = "deleted";
 }

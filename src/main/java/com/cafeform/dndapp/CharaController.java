@@ -29,9 +29,20 @@ public class CharaController {
 	public CharaController() {
 		_datastore = DatastoreServiceFactory.getDatastoreService();
 	}
+	
+	@RequestMapping(value = "/deleted_chara", method = RequestMethod.GET)
+	public String list_deleted_chara(Model model) {
 
+		return list(model, true);	
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String list(Model model) {
+
+		return list(model, false);	
+	}
+
+	public String list(Model model, boolean showDeleted) {
 
 		Query q = new Query("CharaData").addSort("name", SortDirection.ASCENDING);
 		PreparedQuery pq = _datastore.prepare(q);
@@ -48,6 +59,12 @@ public class CharaController {
 		List<Chara> charas = new ArrayList<>();
 		for (Entity charaData : charaDatas) {
 
+			Boolean deleted = getBooleanProperty(charaData, DELETED);
+
+			if((showDeleted  && !deleted) || !showDeleted && deleted) {
+				continue;
+			}
+			
 			PlayerChara chara = new PlayerChara();
 			updatePlayerChara(chara, charaData);
 			charas.add(chara);
@@ -157,6 +174,7 @@ public class CharaController {
 		chara.setSpellcasting_class(getStrProperty(charaData, SPELLCASTING_CLASS));
 		chara.setSpell_note(getStrProperty(charaData, SPELL_NOTE));		
 		chara.setNote(getStrProperty(charaData, NOTE));
+		chara.setDeleted(getBooleanProperty(charaData, DELETED));
 	}
 
 	@RequestMapping("/chara_edit")
@@ -193,6 +211,14 @@ public class CharaController {
 			return 0;
 		}
 		return Integer.parseInt(entity.getProperty(property).toString());
+	}
+	
+	private Boolean getBooleanProperty(Entity entity, String property) {
+
+		if (entity.getProperty(property) == null) {
+			return false;
+		}
+		return (Boolean)entity.getProperty(property);
 	}
 
 	private void updateCharaData(Entity charaData, PlayerChara chara) {
@@ -260,9 +286,12 @@ public class CharaController {
 		charaData.setProperty(HAIR, chara.getHair());
 		charaData.setProperty(SPELLCASTING_ABILITY, chara.getSpellcasting_ability());
 		charaData.setProperty(SPELLCASTING_CLASS, chara.getSpellcasting_class());
-		charaData.setProperty(SPELL_NOTE, new Text(chara.getSpell_note()));
+		charaData.setProperty(SPELL_NOTE, new Text(chara.getSpell_note()));		
 		
 		charaData.setProperty(NOTE, new Text(chara.getNote()));
+		
+		charaData.setProperty(DELETED, chara.isDeleted());
+
 	}
 
 	@RequestMapping("/chara_save")
@@ -286,7 +315,36 @@ public class CharaController {
 
 	@RequestMapping("/chara_delete")
 	public String delete(Model model, @ModelAttribute("charaKey") String charaKey) {
-		_datastore.delete(KeyFactory.stringToKey(charaKey));
+		//_datastore.delete(KeyFactory.stringToKey(charaKey));
+		Entity charaData;
+
+		try {
+			charaData = getCharaData(charaKey);
+			charaData.setProperty(DELETED, true);
+		} catch (EntityNotFoundException e) {
+			// TODO print error
+			return list(model);
+		}
+
+		_datastore.put(charaData);
+
+		return list(model);
+	}
+	
+	@RequestMapping("/chara_restore")
+	public String restore(Model model, @ModelAttribute("charaKey") String charaKey) {
+		//_datastore.delete(KeyFactory.stringToKey(charaKey));
+		Entity charaData;
+
+		try {
+			charaData = getCharaData(charaKey);
+			charaData.setProperty(DELETED, false);
+		} catch (EntityNotFoundException e) {
+			// TODO print error
+			return list(model);
+		}
+
+		_datastore.put(charaData);
 
 		return list(model);
 	}

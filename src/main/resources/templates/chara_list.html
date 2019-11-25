@@ -31,15 +31,28 @@
             <th>プレイヤー</th>
             <th></th>
           </tr>
-          <tr th:each="chara : ${charas}">
-            <td><a href="/"
-              th:href=@{/chara_edit(charaKey=${chara.charaKey})}
-              th:text="${chara.name}"></a></td>
+          <tr th:each="chara : ${charas}">          
+            <td>  
+              <div th:unless="${chara.deleted}">            
+                  <a href="/"
+                    th:href=@{/chara_edit(charaKey=${chara.charaKey})}
+                    th:text="${chara.name}"></a>                  
+              </div>
+              <div th:if="${chara.deleted}">            
+                  <p th:text="${chara.name}"/>                                                     
+              </div>
+            </td>
             <td th:text="${chara.klass}" />
             <td th:text="${chara.level}" />
             <td th:text="${chara.player}" />
-            <td><a href="/"
-              th:href="@{/chara_delete(charaKey=${chara.charaKey})}">削除</a></td>
+            <td>
+              <div th:if="${chara.deleted}">
+               <a href="/" th:href="@{/chara_restore(charaKey=${chara.charaKey})}">復活</a>              
+              </div>
+              <div th:unless="${chara.deleted}">
+               <a href="/" th:href="@{/chara_delete(charaKey=${chara.charaKey})}">削除</a>              
+              </div>
+            </td>
           </tr>
         </table>
 
@@ -47,10 +60,16 @@
       </div>
     </div>
     <div class="row justify-content-between">
-      <div class="col-4">
+      <div class="col-3">
         <a href="/" th:href=@{/chara_create}>新規作成</a>
       </div>
-      <div class="col-4">
+            <div class="col-3">
+        <a href="/" th:href=@{/}>キャラクターリスト</a>
+      </div>
+      <div class="col-3">
+        <a href="/" th:href=@{/deleted_chara}>削除されたキャラ</a>
+      </div>
+      <div class="col-3">
         <a href="/" th:href=@{/campaign_note_list}>キャンペーンメモリスト</a>
       </div>
     </div>

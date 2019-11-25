@@ -74,7 +74,9 @@ public class PlayerChara extends CharaBase implements Serializable {
 	private String _spellcasting_ability = "";
 	private String _spellcasting_class = "";
 	private String _spell_note = "";
-
+	// administrative
+	private Boolean _deleted = false;
+	
 	// this is PlayerChar specific
 	private String _note = "";
 
@@ -615,5 +617,14 @@ public class PlayerChara extends CharaBase implements Serializable {
 
 	public void setSpell_note(String spell_note) {
 		_spell_note = spell_note;
+	}
+	
+	public Boolean isDeleted() {
+		return _deleted;
+
+	}
+	
+	public void setDeleted(Boolean deleted) {
+		_deleted = deleted;
 	}
 }
