@@ -165,6 +165,7 @@
                     th:text="*{charisma_bonus} &gt; 0? '(+' + *{charisma_bonus} + ')':  '(' + *{charisma_bonus} + ')'"></span>
                 </div>
               </div>
+
               <div class="w-100"></div>
 
               <p>
@@ -213,6 +214,26 @@
                     </span>【魅力】</td>
                   </tr>
                 </table>
+              </div>
+
+              <div class="w-100"></div>
+
+              <div class="col">
+                手持ち現金 <input class="form-control" name="cache"
+                  type="text" size=1 value="" style="text-align: center"
+                  th:value="*{cache}" />
+              </div>              
+              <div class="w-100"></div>              
+              <div class="col">
+                撃破数<input class="form-control" name="defeats"
+                  type="text" size=1 value="" style="text-align: center"
+                  th:value="*{defeats}" />
+              </div>
+              <div class="w-100"></div>            
+              <div class="col">
+                ナイスプレーポイント<input class="form-control" name="npp"
+                  type="text" size=1 value="" style="text-align: center"
+                  th:value="*{npp}" />
               </div>
             </div>
           </div>
@@ -388,7 +409,7 @@
               <p>
               <div class="col">
                 その他の習熟と言語
-                <textarea class="form-control" style="height: 150px;"
+                <textarea class="form-control" style="height: 163px;"
                   name="proficiency_language"
                   th:text="*{proficiency_language}"></textarea>
               </div>
@@ -407,7 +428,7 @@
               <div class="w-100"></div>
               <div class="col">
                 装備
-                <textarea class="form-control" style="height: 425px;"
+                <textarea class="form-control" style="height: 430px;"
                   name="equipment" th:text="*{equipment}"></textarea>
               </div>
             </div>
@@ -442,7 +463,7 @@
             <p class="value" th:text="*{spell_attack_bonus}" />
           </div>
         </div>
-                        
+
         <p>
         <div style="page-break-before: always">
           <div class="row justify-content-between">
@@ -504,29 +525,29 @@
           <div class="col-12">
             特徴
             <textarea class="form-control" name="features_traits"
-              th:text="*{features_traits}" style="height: 400px;"></textarea>
+              th:text="*{features_traits}" style="height: 700px;"></textarea>
           </div>
           <div class="col-6">
             人間的特徴
             <textarea class="form-control" name="personality_traits"
-              th:text="*{personality_traits}" style="height: 300px;"></textarea>
+              th:text="*{personality_traits}" style="height: 200px;"></textarea>
           </div>
           <div class="col-6">
             尊ぶもの
             <textarea class="form-control" name="ideals"
-              th:text="*{ideals}" style="height: 300px;"></textarea>
+              th:text="*{ideals}" style="height: 200px;"></textarea>
 
           </div>
           <div class="col-6">
             関わりの深いもの
             <textarea class="form-control" name="bonds"
-              th:text="*{bonds}" style="height: 300px;"></textarea>
+              th:text="*{bonds}" style="height: 200px;"></textarea>
           </div>
 
           <div class="col-6">
             弱み
             <textarea class="form-control" name="flaws"
-              th:text="*{flaws}" style="height: 300px;"></textarea>
+              th:text="*{flaws}" style="height: 200px;"></textarea>
           </div>
         </div>
         <p>

@@ -31,18 +31,18 @@ public class CharaController {
 	}
 	
 	@RequestMapping(value = "/deleted_chara", method = RequestMethod.GET)
-	public String list_deleted_chara(Model model) {
+	public String listDeletedChara(Model model) {
 
-		return list(model, true);	
+		return listChara(model, true);	
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String list(Model model) {
 
-		return list(model, false);	
+		return listChara(model, false);	
 	}
 
-	public String list(Model model, boolean showDeleted) {
+	public String listChara(Model model, boolean showDeleted) {
 
 		Query q = new Query("CharaData").addSort("name", SortDirection.ASCENDING);
 		PreparedQuery pq = _datastore.prepare(q);
@@ -70,11 +70,12 @@ public class CharaController {
 			charas.add(chara);
 		}
 		model.addAttribute("charas", charas);
+		model.addAttribute("showDeleted", showDeleted);
 		return "chara_list";
 	}
 
 	@RequestMapping(value = "/chara_view", method = RequestMethod.GET)
-	public String view(Model model, PlayerChara chara, @ModelAttribute("charaKey") String charaKey)
+	public String viewChara(Model model, PlayerChara chara, @ModelAttribute("charaKey") String charaKey)
 
 	{
 		Entity charaData;
@@ -173,12 +174,15 @@ public class CharaController {
 		chara.setSpellcasting_ability(getStrProperty(charaData, SPELLCASTING_ABILITY));
 		chara.setSpellcasting_class(getStrProperty(charaData, SPELLCASTING_CLASS));
 		chara.setSpell_note(getStrProperty(charaData, SPELL_NOTE));		
+		chara.setCache(getIntProperty(charaData, CACHE));
+		chara.setDefeats(getIntProperty(charaData, DEFEATS));
+		chara.setNpp(getIntProperty(charaData, NPP));		
 		chara.setNote(getStrProperty(charaData, NOTE));
 		chara.setDeleted(getBooleanProperty(charaData, DELETED));
 	}
 
 	@RequestMapping("/chara_edit")
-	public String edit(Model model, PlayerChara chara, @ModelAttribute("charaKey") String charaKey) {
+	public String editChara(Model model, PlayerChara chara, @ModelAttribute("charaKey") String charaKey) {
 		Entity charaData;
 
 		try {
@@ -286,16 +290,18 @@ public class CharaController {
 		charaData.setProperty(HAIR, chara.getHair());
 		charaData.setProperty(SPELLCASTING_ABILITY, chara.getSpellcasting_ability());
 		charaData.setProperty(SPELLCASTING_CLASS, chara.getSpellcasting_class());
-		charaData.setProperty(SPELL_NOTE, new Text(chara.getSpell_note()));		
+		charaData.setProperty(SPELL_NOTE, new Text(chara.getSpell_note()));	
+		charaData.setProperty(CACHE, chara.getCache());
+		charaData.setProperty(DEFEATS, chara.getDefeats());
+		charaData.setProperty(NPP, chara.getNpp());		
 		
-		charaData.setProperty(NOTE, new Text(chara.getNote()));
-		
+		charaData.setProperty(NOTE, new Text(chara.getNote()));		
 		charaData.setProperty(DELETED, chara.isDeleted());
 
 	}
 
 	@RequestMapping("/chara_save")
-	public String save(Model model, @ModelAttribute PlayerChara chara) {
+	public String saveChara(Model model, @ModelAttribute PlayerChara chara) {
 		Entity charaData;
 
 		try {
@@ -314,7 +320,7 @@ public class CharaController {
 	}
 
 	@RequestMapping("/chara_delete")
-	public String delete(Model model, @ModelAttribute("charaKey") String charaKey) {
+	public String deleteChara(Model model, @ModelAttribute("charaKey") String charaKey) {
 		//_datastore.delete(KeyFactory.stringToKey(charaKey));
 		Entity charaData;
 
@@ -332,7 +338,7 @@ public class CharaController {
 	}
 	
 	@RequestMapping("/chara_restore")
-	public String restore(Model model, @ModelAttribute("charaKey") String charaKey) {
+	public String restoreChara(Model model, @ModelAttribute("charaKey") String charaKey) {
 		//_datastore.delete(KeyFactory.stringToKey(charaKey));
 		Entity charaData;
 
@@ -344,13 +350,44 @@ public class CharaController {
 			return list(model);
 		}
 
+		
+		
 		_datastore.put(charaData);
 
 		return list(model);
 	}
 	
+	@RequestMapping("/campaign_note_restore")
+	public String campaignNoteRestore(Model model, @ModelAttribute("key") String key)
+	{
+		Entity campaignNote;
+
+		try {
+			campaignNote = getCampaignNote(key);
+			campaignNote.setProperty(DELETED, false);
+		} catch (EntityNotFoundException e) {
+			// TODO print error
+			return list(model);
+		}
+		
+		_datastore.put(campaignNote);
+		
+		return campaignNoteList(model);
+	}
+	
 	@RequestMapping(value = "/campaign_note_list", method = RequestMethod.GET)
-	public String campaign_note_list(Model model) {
+	public String campaignNoteList(Model model) 
+	{	
+		return(campaignNoteList(model, false));
+	}
+	
+	@RequestMapping(value = "/deleted_campaign_note_list", method = RequestMethod.GET)
+	public String deletedCampaignNoteList(Model model) 
+	{	
+		return(campaignNoteList(model, true));
+	}
+		
+	public String campaignNoteList(Model model, boolean showDeleted) {		
 
 		Query q = new Query("CampaignNote").addSort("campaign_name", SortDirection.ASCENDING);
 		PreparedQuery pq = _datastore.prepare(q);
@@ -366,7 +403,14 @@ public class CharaController {
 
 		List<CampaignNote> notes = new ArrayList<>();
 		
-		for (Entity entity : entities) {					
+		for (Entity entity : entities) {			
+			
+			Boolean deleted = getBooleanProperty(entity, DELETED);
+
+			if((showDeleted  && !deleted) || !showDeleted && deleted) 
+			{
+				continue;
+			}
 
 			CampaignNote note = new CampaignNote();
 			
@@ -374,15 +418,18 @@ public class CharaController {
 			note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
 			note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
 			note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+			note.setDeleted(getBooleanProperty(entity, DELETED));
 			
 			notes.add(note);
 		}
 		model.addAttribute("notes", notes);
+		model.addAttribute("showDeleted", showDeleted);
 		
 		return "campaign_note_list_page";
 	}
 	
-	Entity getCampaignNote(String key) throws EntityNotFoundException {
+	Entity getCampaignNote(String key) throws EntityNotFoundException 
+	{
 		try {
 			return _datastore.get(KeyFactory.stringToKey(key));
 		} catch (IllegalArgumentException e) {
@@ -391,7 +438,7 @@ public class CharaController {
 	}
 
 	@RequestMapping("/campaign_note_save")
-	public String campaign_note_save(Model model, @ModelAttribute CampaignNote note) 
+	public String saveCampaignNote(Model model, @ModelAttribute CampaignNote note) 
 	{
 		Entity entity;
 
@@ -399,12 +446,13 @@ public class CharaController {
 			entity = getCampaignNote(note.getKey());
 		} catch (EntityNotFoundException e) {
 			// TODO print error
-			return campaign_note_list(model);
+			return campaignNoteList(model);
 		}
 
 		entity.setProperty(CAMPAIGN_NAME, note.getCampaign_name());
 		entity.setProperty(CAMPAIGN_NOTE_TITLE, note.getTitle());
 		entity.setProperty(CAMPAIGN_NOTE, new Text(note.getNote()));
+		entity.setProperty(DELETED,  note.isDeleted());
 
 		_datastore.put(entity);
 		note.setKey(KeyFactory.keyToString(entity.getKey()));
@@ -413,14 +461,25 @@ public class CharaController {
 	}
 
 	@RequestMapping("/campaign_note_delete")
-	public String campaign_note_delete(Model model, @ModelAttribute("key") String key) 
-	{
-		_datastore.delete(KeyFactory.stringToKey(key));
-		return campaign_note_list(model);
+	public String deleteCampaignNote(Model model, @ModelAttribute("key") String key) 
+	{		
+		Entity campaignNote;
+
+		try {
+			campaignNote = getCampaignNote(key);
+			campaignNote.setProperty(DELETED, true);
+		} catch (EntityNotFoundException e) {
+			// TODO print error
+			return list(model);
+		}
+
+		_datastore.put(campaignNote);
+		
+		return campaignNoteList(model);
 	}
 	
 	@RequestMapping("/campaign_note_edit")
-	public String edit(Model model, CampaignNote note, @ModelAttribute("key") String key)
+	public String editCampaignNote(Model model, CampaignNote note, @ModelAttribute("key") String key)
 	{
 		Entity entity;
 
@@ -435,12 +494,13 @@ public class CharaController {
 		note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
 		note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
 		note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+		note.setDeleted(getBooleanProperty(entity, DELETED));
 
 		return "campaign_note_edit";
 	}
 	
 	@RequestMapping("/campaign_note_create")
-	public String campaign_note_create(Model model, CampaignNote note) {
+	public String createCampaignNote(Model model, CampaignNote note) {
 		return "campaign_note_edit";
 	}
 }

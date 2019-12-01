@@ -66,11 +66,13 @@ public class Constants {
     public static final String SPELLCASTING_ABILITY = "spellcasting_ability";   
     public static final String SPELLCASTING_CLASS = "spellcasting_class";
     public static final String SPELL_NOTE = "spell_note";
-    public static final String NOTE = "note";
-    
+    public static final String NOTE = "note";   
     public static final String CAMPAIGN_NAME = "campaign_name";
     public static final String CAMPAIGN_NOTE_TITLE = "campaign_note_title";
-    public static final String CAMPAIGN_NOTE = "campaign_note"; 
-    
+    public static final String CAMPAIGN_NOTE = "campaign_note";     
     public static final String DELETED = "deleted";
+    public static final String CACHE = "cache";
+    public static final String DEFEATS = "defeats";
+    public static final String NPP = "npp";
+    
 }

@@ -63,11 +63,13 @@
       <div class="col-3">
         <a href="/" th:href=@{/chara_create}>新規作成</a>
       </div>
-            <div class="col-3">
-        <a href="/" th:href=@{/}>キャラクターリスト</a>
-      </div>
       <div class="col-3">
-        <a href="/" th:href=@{/deleted_chara}>削除されたキャラ</a>
+        <div th:unless="${showDeleted}">
+          <a href="/" th:href=@{/deleted_chara}>削除されたキャラ</a>
+        </div>
+        <div th:if="${showDeleted}">
+          <a href="/" th:href=@{/}>キャラクターリスト</a>
+        </div>        
       </div>
       <div class="col-3">
         <a href="/" th:href=@{/campaign_note_list}>キャンペーンメモリスト</a>

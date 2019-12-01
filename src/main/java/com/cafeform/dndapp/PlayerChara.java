@@ -74,6 +74,10 @@ public class PlayerChara extends CharaBase implements Serializable {
 	private String _spellcasting_ability = "";
 	private String _spellcasting_class = "";
 	private String _spell_note = "";
+	private Integer _defeats = 0;
+	private Integer _cache = 0;
+	private Integer _npp = 0;
+	
 	// administrative
 	private Boolean _deleted = false;
 	
@@ -627,4 +631,29 @@ public class PlayerChara extends CharaBase implements Serializable {
 	public void setDeleted(Boolean deleted) {
 		_deleted = deleted;
 	}
+
+	public Integer getDefeats() {
+		return _defeats;
+	}
+
+	public void setDefeats(Integer defeats) {
+		_defeats = defeats;
+	}
+
+	public Integer getCache() {
+		return _cache;
+	}
+
+	public void setCache(Integer cache) {
+		_cache = cache;
+	}
+
+	public Integer getNpp() {
+		return _npp;
+	}
+
+	public void setNpp(Integer npp) {
+		_npp = npp;
+	}
+	
 }
