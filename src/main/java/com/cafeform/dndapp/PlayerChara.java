@@ -77,6 +77,8 @@ public class PlayerChara extends CharaBase implements Serializable {
 	private Integer _defeats = 0;
 	private Integer _cache = 0;
 	private Integer _npp = 0;
+	private Integer _spell_save_dc_modifier = 0;
+	private Integer _spell_attack_bonus_modifier = 0;			
 	
 	// administrative
 	private Boolean _deleted = false;
@@ -654,6 +656,22 @@ public class PlayerChara extends CharaBase implements Serializable {
 
 	public void setNpp(Integer npp) {
 		_npp = npp;
+	}
+
+	public Integer getSpell_save_dc_modifier() {
+		return _spell_save_dc_modifier;
+	}
+
+	public void setSpell_save_dc_modifier(Integer spell_save_dc_modifier) {
+		_spell_save_dc_modifier = spell_save_dc_modifier;
+	}
+
+	public Integer getSpell_attack_bonus_modifier() {
+		return _spell_attack_bonus_modifier;
+	}
+
+	public void setSpell_attack_bonus_modifier(Integer spell_attack_bonus_modifier) {
+		_spell_attack_bonus_modifier = spell_attack_bonus_modifier;
 	}
 	
 }

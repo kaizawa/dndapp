@@ -346,15 +346,15 @@ public abstract class CharaBase implements Chara {
 		switch (getSpellcasting_ability()) {
 		case "知力":
 		case INT:
-			return 10 + getIntelligence_bonus();
+			return 10 + getIntelligence_bonus() + getSpell_save_dc_modifier();
 		case "判断力":
 		case WIS:
-			return 10 + getWisdom_bonus();
+			return 10 + getWisdom_bonus() + getSpell_save_dc_modifier();
 		case "魅力":
 		case CHA:
-			return 10 + getCharisma_bonus();
+			return 10 + getCharisma_bonus() + getSpell_save_dc_modifier();
 		default:
-			return 10;
+			return 10  + getSpell_attack_bonus_modifier();
 		}
 	}
 
@@ -363,15 +363,15 @@ public abstract class CharaBase implements Chara {
 		switch (getSpellcasting_ability()) {
 		case "知力":
 		case INT:
-			return getProficiency_bonus() + getIntelligence_bonus();
+			return getProficiency_bonus() + getIntelligence_bonus() + getSpell_attack_bonus_modifier();
 		case "判断力":
 		case WIS:
-			return getProficiency_bonus() + getWisdom_bonus();
+			return getProficiency_bonus() + getWisdom_bonus() + getSpell_attack_bonus_modifier();
 		case "魅力":
 		case CHA:
-			return getProficiency_bonus() + getCharisma_bonus();
+			return getProficiency_bonus() + getCharisma_bonus() + getSpell_attack_bonus_modifier();
 		default:
-			return getProficiency_bonus();
+			return getProficiency_bonus() + getSpell_attack_bonus_modifier();
 		}
 	}
 }

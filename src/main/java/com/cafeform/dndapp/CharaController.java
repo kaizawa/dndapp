@@ -179,6 +179,8 @@ public class CharaController {
 		chara.setNpp(getIntProperty(charaData, NPP));		
 		chara.setNote(getStrProperty(charaData, NOTE));
 		chara.setDeleted(getBooleanProperty(charaData, DELETED));
+		chara.setSpell_save_dc_modifier(getIntProperty(charaData, SPELL_SAVE_DC_MODIFIER));
+		chara.setSpell_attack_bonus_modifier(getIntProperty(charaData, SPELL_ATTACK_BONUS_MODIFIER));
 	}
 
 	@RequestMapping("/chara_edit")
@@ -297,6 +299,9 @@ public class CharaController {
 		
 		charaData.setProperty(NOTE, new Text(chara.getNote()));		
 		charaData.setProperty(DELETED, chara.isDeleted());
+		
+		charaData.setProperty(SPELL_SAVE_DC_MODIFIER, chara.getSpell_save_dc_modifier());
+		charaData.setProperty(SPELL_ATTACK_BONUS_MODIFIER, chara.getSpell_attack_bonus_modifier());
 
 	}
 

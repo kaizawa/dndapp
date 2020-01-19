@@ -74,5 +74,7 @@ public class Constants {
     public static final String CACHE = "cache";
     public static final String DEFEATS = "defeats";
     public static final String NPP = "npp";
+    public static final String SPELL_SAVE_DC_MODIFIER = "spell_save_dc_modifier";
+    public static final String SPELL_ATTACK_BONUS_MODIFIER = "spell_attack_bonus_modifier";
     
 }

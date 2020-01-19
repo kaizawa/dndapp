@@ -454,13 +454,26 @@
                 th:selected="'魅力' == *{spellcasting_ability}"></option>
             </select>
           </div>
+          
           <div class="col">
             呪文セーヴ難易度
             <p class="value" th:text="*{spell_save_dc}" />
           </div>
           <div class="col">
+            呪文セーヴ難易度修正値
+            <input class="form-control" id="dex_input"
+                    name="spell_save_dc_modifier" type="text" size=1 value=""
+                    style="text-align: center" th:value="*{spell_save_dc_modifier}" />
+          </div>
+          <div class="col">
             呪文攻撃ボーナス
             <p class="value" th:text="*{spell_attack_bonus}" />
+          </div>
+          <div class="col">
+            呪文攻撃ボーナス修正値            
+            <input class="form-control" id="dex_input"
+                    name="spell_attack_bonus_modifier" type="text" size=1 value=""
+                    style="text-align: center" th:value="*{spell_attack_bonus_modifier}" />
           </div>
         </div>
 

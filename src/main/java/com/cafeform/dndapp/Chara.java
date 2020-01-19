@@ -202,6 +202,10 @@ public interface Chara {
     
     public String getSpell_note();
     
+    public Integer getSpell_save_dc_modifier();
+
+    public Integer getSpell_attack_bonus_modifier();
+    
     // for administrative
     public Boolean isDeleted();
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Character Detail</title>
+<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="small">
+      <h3>キャンペーンメモ</h3>
+
+      <form action="#" th:action="@{/campaign_note_save}"
+        th:object="${campaignNote}" method="POST">
+
+
+        <div style="page-break-before: always">
+          <div class="row justify-content-between">
+            <div class="col-1">
+              <input type="submit" value="保存">
+            </div>
+            <div class="col-4">
+              <a href="" th:href=@{/campaign_note_list}>キャンペーンメモリストへ戻る</a>
+            </div>
+          </div>
+          
+          <p>
+          
+          <div class="row">
+            <div class="col-6">
+              キャンペーン名
+              <input class="form-control" id="input1" name="campaign_name"
+              type="text" value="" th:value="*{campaign_name}" />
+            </div>
+            <div class="col-6">
+              タイトル
+                  <input class="form-control" id="input1" name="title"
+              type="text" value="" th:value="*{title}" />
+            </div>
+            <div class="w-100"></div>
+            
+            <p>
+            <div class="col-12">
+              <textarea class="form-control" name="note"
+                th:text="*{note}" style="min-height: 1200px;"></textarea>
+            </div>
+          </div>
+        </div>
+
+          <input class="btn" type="hidden" name="key" value="" th:value="*{key}" />
+      </form>
+
+      <p>
+      <div class="row justify-content-end">
+        <div class="col-1">
+          <form action="#" th:action="@{/campaign_note_delete}"
+            th:object="${campaignNote}" method="GET">
+            <input type="hidden" name="key" value=""
+              th:value="*{key}" /> <input type="submit" value="削除">
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
