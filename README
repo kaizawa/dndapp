@@ -1,3 +1,4 @@
+Requirements: JDK 17 or later (Java 8 deprecated on App Engine Jan 2026)
 
 Google App Engine doc
 https://cloud.google.com/appengine/docs/standard/java/how-to
@@ -6,7 +7,28 @@ Thymeleaf ja doc
 https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html
 
 Run App on local
-$ mvn spring-boot:run
+-----------------
+This app uses Google Cloud Datastore. For local run you must use the Datastore emulator
+(otherwise the app will try to use real GCP and require valid credentials).
+You must set DATASTORE_EMULATOR_HOST so the app uses the emulator without real OAuth credentials.
+
+1. Start the Datastore emulator (in a separate terminal):
+   $ gcloud beta emulators datastore start --host-port=localhost:8081
+
+2. Build and run the app with the emulator (env vars must be set in the same shell as the java command):
+   $ export DATASTORE_EMULATOR_HOST=localhost:8081
+   $ export GOOGLE_CLOUD_PROJECT=dndapp
+   $ JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home java -jar target/dndapp-15.war
+
+   Or as a single line so the env vars are always set:
+   $ DATASTORE_EMULATOR_HOST=localhost:8081 GOOGLE_CLOUD_PROJECT=dndapp JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home java -jar target/dndapp-15.war
+
+   (Adjust JAVA_HOME if your JDK 17 is elsewhere; e.g. macOS Homebrew: /usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home)
+
+3. Open http://localhost:8080/
+
+Build (without running):
+   $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests
 
 Deploy App to GAE
 $ mvn appengine:deploy 

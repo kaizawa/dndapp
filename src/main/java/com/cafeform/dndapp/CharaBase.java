@@ -80,7 +80,7 @@ public abstract class CharaBase implements Chara {
 		}
 	}
 
-	public Integer getAtilibyBonus(Integer ability) {
+	public Integer getAbilityBonus(Integer ability) {
 
 		ability = ability % 2 == 0 ? ability : ability - 1;
 		return (ability - 10) / 2;
@@ -88,36 +88,36 @@ public abstract class CharaBase implements Chara {
 
 	@Override
 	public Integer getStrength_bonus() {
-		return getAtilibyBonus(getStrength());
+		return getAbilityBonus(getStrength());
 	}
 
 	@Override
 	public Integer getDexterity_bonus() {
-		return getAtilibyBonus(getDexterity());
+		return getAbilityBonus(getDexterity());
 
 	}
 
 	@Override
 	public Integer getConstitution_bonus() {
-		return getAtilibyBonus(getConstitution());
+		return getAbilityBonus(getConstitution());
 
 	}
 
 	@Override
 	public Integer getIntelligence_bonus() {
-		return getAtilibyBonus(getIntelligence());
+		return getAbilityBonus(getIntelligence());
 
 	}
 
 	@Override
 	public Integer getWisdom_bonus() {
-		return getAtilibyBonus(getWisdom());
+		return getAbilityBonus(getWisdom());
 
 	}
 
 	@Override
 	public Integer getCharisma_bonus() {
-		return getAtilibyBonus(getCharisma());
+		return getAbilityBonus(getCharisma());
 	}
 
 	@Override
