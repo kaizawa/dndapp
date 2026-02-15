@@ -30,8 +30,8 @@ You must set DATASTORE_EMULATOR_HOST so the app uses the emulator without real O
 Build (without running):
    $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests
 
-Deploy App to GAE
-$ mvn appengine:deploy 
+Deploy App to GAE (use JDK 17; plugin runs staging tool that requires Java 17):
+$ JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home mvn appengine:deploy 
 
 Show log
 $ gcloud app logs tail
