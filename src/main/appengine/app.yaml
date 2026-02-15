@@ -1,1 +1,4 @@
 runtime: java17
+# Run the executable Spring Boot WAR so the app serves requests (avoids runtime Jetty 404).
+# For deploy use: mvn package -DskipTests -P gae-executable then gcloud app deploy target/appengine-staging
+entrypoint: java -Dserver.port=$PORT -jar dndapp-15.war

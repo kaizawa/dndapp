@@ -30,8 +30,21 @@ You must set DATASTORE_EMULATOR_HOST so the app uses the emulator without real O
 Build (without running):
    $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests
 
-Deploy App to GAE (use JDK 17; plugin runs staging tool that requires Java 17):
-$ JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home mvn appengine:deploy 
+Deploy App to GAE (use JDK 17)
+------------------------------
+New deployments must use the executable-WAR flow so the app serves correctly (avoid 404 on new versions).
+Set CLOUDSDK_CORE_DISABLE_PROMPTS=1 so gcloud does not wait for "y/N".
+
+1. Build and stage (profile gae-executable stages WAR + app.yaml with entrypoint):
+   $ mvn clean package -DskipTests -P gae-executable
+
+2. Deploy the staging directory (do not use mvn appengine:deploy; that uses the old staging and can 404):
+   $ export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+   $ gcloud app deploy target/appengine-staging --project dndtool-227201
+
+One-liner (with JDK 17 and no prompts):
+   $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests -P gae-executable
+   $ CLOUDSDK_CORE_DISABLE_PROMPTS=1 gcloud app deploy target/appengine-staging --project dndtool-227201 
 
 Show log
 $ gcloud app logs tail

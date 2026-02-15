@@ -1,5 +1,6 @@
 package com.cafeform.dndapp;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.cloud.datastore.Blob;
+import com.google.cloud.datastore.BlobValue;
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.KeyFactory;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
-import com.google.cloud.datastore.StructuredQuery.OrderBy;
 
 @Controller
 public class CharaController {
@@ -44,9 +46,9 @@ public class CharaController {
 	}
 
 	public String listChara(Model model, boolean showDeleted) {
+		// Do not orderBy("name"): entities with only name_BLOB (no "name") would be excluded from index.
 		Query<Entity> q = Query.newEntityQueryBuilder()
 				.setKind("CharaData")
-				.addOrderBy(OrderBy.asc("name"))
 				.setLimit(PAGE_SIZE)
 				.build();
 
@@ -63,6 +65,7 @@ public class CharaController {
 			updatePlayerChara(chara, charaData);
 			charas.add(chara);
 		}
+		charas.sort(java.util.Comparator.comparing(Chara::getName, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())));
 
 		model.addAttribute("charas", charas);
 		model.addAttribute("showDeleted", showDeleted);
@@ -98,12 +101,12 @@ public class CharaController {
 
 	private void updatePlayerChara(PlayerChara chara, Entity charaData) {
 		chara.setCharaKey(charaData.getKey().toUrlSafe());
-		chara.setName(getStrProperty(charaData, NAME));
-		chara.setKlass(getStrProperty(charaData, KLASS));
+		chara.setName(getStringFromBlobOrLegacy(charaData, NAME));
+		chara.setKlass(getStringFromBlobOrLegacy(charaData, KLASS));
 		chara.setLevel(getIntProperty(charaData, LEVEL));
-		chara.setPlayer(getStrProperty(charaData, PLAYER));
-		chara.setRace(getStrProperty(charaData, RACE));
-		chara.setAlignment(getStrProperty(charaData, ALIGNMENT));
+		chara.setPlayer(getStringFromBlobOrLegacy(charaData, PLAYER));
+		chara.setRace(getStringFromBlobOrLegacy(charaData, RACE));
+		chara.setAlignment(getStringFromBlobOrLegacy(charaData, ALIGNMENT));
 		chara.setExperience(getIntProperty(charaData, EXPERIENCE));
 		chara.setStrength(getIntProperty(charaData, STR));
 		chara.setDexterity(getIntProperty(charaData, DEX));
@@ -111,57 +114,57 @@ public class CharaController {
 		chara.setIntelligence(getIntProperty(charaData, INT));
 		chara.setWisdom(getIntProperty(charaData, WIS));
 		chara.setCharisma(getIntProperty(charaData, CHA));
-		chara.setInspiration(getStrProperty(charaData, INSPIRATION));
-		chara.setStrength_save(getStrProperty(charaData, STR + SAVE));
-		chara.setDexterity_save(getStrProperty(charaData, DEX + SAVE));
-		chara.setConstitution_save(getStrProperty(charaData, CON + SAVE));
-		chara.setIntelligence_save(getStrProperty(charaData, INT + SAVE));
-		chara.setWisdom_save(getStrProperty(charaData, WIS + SAVE));
-		chara.setCharisma_save(getStrProperty(charaData, CHA + SAVE));
-		chara.setAcrobatics(getStrProperty(charaData, ACROBATICS));
-		chara.setAnimal(getStrProperty(charaData, ANIMAL));
-		chara.setArcana(getStrProperty(charaData, ARCANA));
-		chara.setAthletics(getStrProperty(charaData, ATHLETICS));
-		chara.setDeception(getStrProperty(charaData, DECEPTION));
-		chara.setHistory(getStrProperty(charaData, HISTORY));
-		chara.setIntimidation(getStrProperty(charaData, INTIMIDATION));
-		chara.setInsight(getStrProperty(charaData, INSIGHT));
-		chara.setInvestigation(getStrProperty(charaData, INVESTIGATION));
-		chara.setMedicine(getStrProperty(charaData, MEDICINE));
-		chara.setNature(getStrProperty(charaData, NATURE));
-		chara.setPerformance(getStrProperty(charaData, PERFORMANCE));
-		chara.setPerception(getStrProperty(charaData, PERCEPTION));
-		chara.setPersuasion(getStrProperty(charaData, PERSUASION));
-		chara.setReligion(getStrProperty(charaData, RELIGION));
-		chara.setSleight(getStrProperty(charaData, SLEIGHT));
-		chara.setStealth(getStrProperty(charaData, STEALTH));
-		chara.setSurvival(getStrProperty(charaData, SURVIVAL));
-		chara.setProficiency_language(getStrProperty(charaData, PROFICIENCY_LANGUAGE));
+		chara.setInspiration(getStringFromBlobOrLegacy(charaData, INSPIRATION));
+		chara.setStrength_save(getStringFromBlobOrLegacy(charaData, STR + SAVE));
+		chara.setDexterity_save(getStringFromBlobOrLegacy(charaData, DEX + SAVE));
+		chara.setConstitution_save(getStringFromBlobOrLegacy(charaData, CON + SAVE));
+		chara.setIntelligence_save(getStringFromBlobOrLegacy(charaData, INT + SAVE));
+		chara.setWisdom_save(getStringFromBlobOrLegacy(charaData, WIS + SAVE));
+		chara.setCharisma_save(getStringFromBlobOrLegacy(charaData, CHA + SAVE));
+		chara.setAcrobatics(getStringFromBlobOrLegacy(charaData, ACROBATICS));
+		chara.setAnimal(getStringFromBlobOrLegacy(charaData, ANIMAL));
+		chara.setArcana(getStringFromBlobOrLegacy(charaData, ARCANA));
+		chara.setAthletics(getStringFromBlobOrLegacy(charaData, ATHLETICS));
+		chara.setDeception(getStringFromBlobOrLegacy(charaData, DECEPTION));
+		chara.setHistory(getStringFromBlobOrLegacy(charaData, HISTORY));
+		chara.setIntimidation(getStringFromBlobOrLegacy(charaData, INTIMIDATION));
+		chara.setInsight(getStringFromBlobOrLegacy(charaData, INSIGHT));
+		chara.setInvestigation(getStringFromBlobOrLegacy(charaData, INVESTIGATION));
+		chara.setMedicine(getStringFromBlobOrLegacy(charaData, MEDICINE));
+		chara.setNature(getStringFromBlobOrLegacy(charaData, NATURE));
+		chara.setPerformance(getStringFromBlobOrLegacy(charaData, PERFORMANCE));
+		chara.setPerception(getStringFromBlobOrLegacy(charaData, PERCEPTION));
+		chara.setPersuasion(getStringFromBlobOrLegacy(charaData, PERSUASION));
+		chara.setReligion(getStringFromBlobOrLegacy(charaData, RELIGION));
+		chara.setSleight(getStringFromBlobOrLegacy(charaData, SLEIGHT));
+		chara.setStealth(getStringFromBlobOrLegacy(charaData, STEALTH));
+		chara.setSurvival(getStringFromBlobOrLegacy(charaData, SURVIVAL));
+		chara.setProficiency_language(getStringFromBlobOrLegacy(charaData, PROFICIENCY_LANGUAGE));
 		chara.setAc(getIntProperty(charaData, AC));
 		chara.setInitiative(getIntProperty(charaData, INITIATIVE));
 		chara.setSpeed(getIntProperty(charaData, SPEED));
-		chara.setHit_dice(getStrProperty(charaData, HIT_DICE));
+		chara.setHit_dice(getStringFromBlobOrLegacy(charaData, HIT_DICE));
 		chara.setHit_point(getIntProperty(charaData, HIT_POINT));
-		chara.setAttack_spellcasting(getStrProperty(charaData, ATTACK_SPELLCASTING));
-		chara.setEquipment(getStrProperty(charaData, EQUIPMENT));
-		chara.setPersonality_traits(getStrProperty(charaData, PERSONALITY_TRAITS));
-		chara.setIdeals(getStrProperty(charaData, IDEALS));
-		chara.setBonds(getStrProperty(charaData, BONDS));
-		chara.setFlaws(getStrProperty(charaData, FLAWS));
-		chara.setFeatures_traits(getStrProperty(charaData, FEATURES_TRAITS));
-		chara.setAge(getStrProperty(charaData, AGE));
-		chara.setHeight(getStrProperty(charaData, HEIGHT));
-		chara.setWeight(getStrProperty(charaData, WEIGHT));
-		chara.setEyes(getStrProperty(charaData, EYES));
-		chara.setSkin(getStrProperty(charaData, SKIN));
-		chara.setHair(getStrProperty(charaData, HAIR));
-		chara.setSpellcasting_ability(getStrProperty(charaData, SPELLCASTING_ABILITY));
-		chara.setSpellcasting_class(getStrProperty(charaData, SPELLCASTING_CLASS));
-		chara.setSpell_note(getStrProperty(charaData, SPELL_NOTE));
+		chara.setAttack_spellcasting(getStringFromBlobOrLegacy(charaData, ATTACK_SPELLCASTING));
+		chara.setEquipment(getStringFromBlobOrLegacy(charaData, EQUIPMENT));
+		chara.setPersonality_traits(getStringFromBlobOrLegacy(charaData, PERSONALITY_TRAITS));
+		chara.setIdeals(getStringFromBlobOrLegacy(charaData, IDEALS));
+		chara.setBonds(getStringFromBlobOrLegacy(charaData, BONDS));
+		chara.setFlaws(getStringFromBlobOrLegacy(charaData, FLAWS));
+		chara.setFeatures_traits(getStringFromBlobOrLegacy(charaData, FEATURES_TRAITS));
+		chara.setAge(getStringFromBlobOrLegacy(charaData, AGE));
+		chara.setHeight(getStringFromBlobOrLegacy(charaData, HEIGHT));
+		chara.setWeight(getStringFromBlobOrLegacy(charaData, WEIGHT));
+		chara.setEyes(getStringFromBlobOrLegacy(charaData, EYES));
+		chara.setSkin(getStringFromBlobOrLegacy(charaData, SKIN));
+		chara.setHair(getStringFromBlobOrLegacy(charaData, HAIR));
+		chara.setSpellcasting_ability(getStringFromBlobOrLegacy(charaData, SPELLCASTING_ABILITY));
+		chara.setSpellcasting_class(getStringFromBlobOrLegacy(charaData, SPELLCASTING_CLASS));
+		chara.setSpell_note(getStringFromBlobOrLegacy(charaData, SPELL_NOTE));
 		chara.setCache(getIntProperty(charaData, CACHE));
 		chara.setDefeats(getIntProperty(charaData, DEFEATS));
 		chara.setNpp(getIntProperty(charaData, NPP));
-		chara.setNote(getStrProperty(charaData, NOTE));
+		chara.setNote(getStringFromBlobOrLegacy(charaData, NOTE));
 		chara.setDeleted(getBooleanProperty(charaData, DELETED));
 		chara.setSpell_save_dc_modifier(getIntProperty(charaData, SPELL_SAVE_DC_MODIFIER));
 		chara.setSpell_attack_bonus_modifier(getIntProperty(charaData, SPELL_ATTACK_BONUS_MODIFIER));
@@ -173,6 +176,31 @@ public class CharaController {
 		}
 		String v = entity.getString(property);
 		return v != null ? v : "";
+	}
+
+	/** Read string: prefer prop_BLOB (Blob); if missing/empty or error, use legacy prop (String). */
+	private String getStringFromBlobOrLegacy(Entity entity, String prop) {
+		String blobProp = prop + "_BLOB";
+		if (entity.contains(blobProp)) {
+			try {
+				Blob b = entity.getBlob(blobProp);
+				if (b != null) {
+					String decoded = new String(b.toByteArray(), StandardCharsets.UTF_8);
+					if (!decoded.isEmpty()) return decoded;
+				}
+			} catch (Exception e) {
+				// fall through to legacy
+			}
+		}
+		return getStrProperty(entity, prop);
+	}
+
+	/** Write string to prop_BLOB only (Blob type, unindexed so >1500 bytes allowed); do not set legacy prop. */
+	private static void setStringToBlob(Entity.Builder builder, String prop, String s) {
+		if (s == null) s = "";
+		Blob blob = Blob.copyFrom(s.getBytes(StandardCharsets.UTF_8));
+		BlobValue value = BlobValue.newBuilder(blob).setExcludeFromIndexes(true).build();
+		builder.set(prop + "_BLOB", value);
 	}
 
 	private Integer getIntProperty(Entity entity, String property) {
@@ -203,12 +231,56 @@ public class CharaController {
 
 	private Entity buildCharaEntity(Key key, PlayerChara chara) {
 		Entity.Builder builder = Entity.newBuilder(key);
-		builder.set(NAME, chara.getName() != null ? chara.getName() : "")
-				.set(KLASS, chara.getKlass() != null ? chara.getKlass() : "")
-				.set(LEVEL, chara.getLevel() != null ? chara.getLevel() : 0)
-				.set(PLAYER, chara.getPlayer() != null ? chara.getPlayer() : "")
-				.set(RACE, chara.getRace() != null ? chara.getRace() : "")
-				.set(ALIGNMENT, chara.getAlignment() != null ? chara.getAlignment() : "")
+		setStringToBlob(builder, NAME, chara.getName());
+		setStringToBlob(builder, KLASS, chara.getKlass());
+		setStringToBlob(builder, PLAYER, chara.getPlayer());
+		setStringToBlob(builder, RACE, chara.getRace());
+		setStringToBlob(builder, ALIGNMENT, chara.getAlignment());
+		setStringToBlob(builder, INSPIRATION, chara.getInspiration());
+		setStringToBlob(builder, STR + SAVE, chara.getStrength_save());
+		setStringToBlob(builder, DEX + SAVE, chara.getDexterity_save());
+		setStringToBlob(builder, CON + SAVE, chara.getConstitution_save());
+		setStringToBlob(builder, INT + SAVE, chara.getIntelligence_save());
+		setStringToBlob(builder, WIS + SAVE, chara.getWisdom_save());
+		setStringToBlob(builder, CHA + SAVE, chara.getCharisma_save());
+		setStringToBlob(builder, ACROBATICS, chara.getAcrobatics());
+		setStringToBlob(builder, ANIMAL, chara.getAnimal());
+		setStringToBlob(builder, ARCANA, chara.getArcana());
+		setStringToBlob(builder, ATHLETICS, chara.getAthletics());
+		setStringToBlob(builder, DECEPTION, chara.getDeception());
+		setStringToBlob(builder, HISTORY, chara.getHistory());
+		setStringToBlob(builder, INTIMIDATION, chara.getIntimidation());
+		setStringToBlob(builder, INSIGHT, chara.getInsight());
+		setStringToBlob(builder, INVESTIGATION, chara.getInvestigation());
+		setStringToBlob(builder, MEDICINE, chara.getMedicine());
+		setStringToBlob(builder, NATURE, chara.getNature());
+		setStringToBlob(builder, PERFORMANCE, chara.getPerformance());
+		setStringToBlob(builder, PERCEPTION, chara.getPerception());
+		setStringToBlob(builder, PERSUASION, chara.getPersuasion());
+		setStringToBlob(builder, RELIGION, chara.getReligion());
+		setStringToBlob(builder, SLEIGHT, chara.getSleight());
+		setStringToBlob(builder, STEALTH, chara.getStealth());
+		setStringToBlob(builder, SURVIVAL, chara.getSurvival());
+		setStringToBlob(builder, PROFICIENCY_LANGUAGE, chara.getProficiency_language());
+		setStringToBlob(builder, HIT_DICE, chara.getHit_dice());
+		setStringToBlob(builder, ATTACK_SPELLCASTING, chara.getAttack_spellcasting());
+		setStringToBlob(builder, EQUIPMENT, chara.getEquipment());
+		setStringToBlob(builder, PERSONALITY_TRAITS, chara.getPersonality_traits());
+		setStringToBlob(builder, IDEALS, chara.getIdeals());
+		setStringToBlob(builder, BONDS, chara.getBonds());
+		setStringToBlob(builder, FLAWS, chara.getFlaws());
+		setStringToBlob(builder, FEATURES_TRAITS, chara.getFeatures_traits());
+		setStringToBlob(builder, AGE, chara.getAge());
+		setStringToBlob(builder, HEIGHT, chara.getHeight());
+		setStringToBlob(builder, WEIGHT, chara.getWeight());
+		setStringToBlob(builder, EYES, chara.getEyes());
+		setStringToBlob(builder, SKIN, chara.getSkin());
+		setStringToBlob(builder, HAIR, chara.getHair());
+		setStringToBlob(builder, SPELLCASTING_ABILITY, chara.getSpellcasting_ability());
+		setStringToBlob(builder, SPELLCASTING_CLASS, chara.getSpellcasting_class());
+		setStringToBlob(builder, SPELL_NOTE, chara.getSpell_note());
+		setStringToBlob(builder, NOTE, chara.getNote());
+		builder.set(LEVEL, chara.getLevel() != null ? chara.getLevel() : 0)
 				.set(EXPERIENCE, chara.getExperience() != null ? chara.getExperience() : 0)
 				.set(STR, chara.getStrength() != null ? chara.getStrength() : 0)
 				.set(DEX, chara.getDexterity() != null ? chara.getDexterity() : 0)
@@ -216,57 +288,13 @@ public class CharaController {
 				.set(INT, chara.getIntelligence() != null ? chara.getIntelligence() : 0)
 				.set(WIS, chara.getWisdom() != null ? chara.getWisdom() : 0)
 				.set(CHA, chara.getCharisma() != null ? chara.getCharisma() : 0)
-				.set(INSPIRATION, chara.getInspiration() != null ? chara.getInspiration() : "")
-				.set(STR + SAVE, chara.getStrength_save() != null ? chara.getStrength_save() : "")
-				.set(DEX + SAVE, chara.getDexterity_save() != null ? chara.getDexterity_save() : "")
-				.set(CON + SAVE, chara.getConstitution_save() != null ? chara.getConstitution_save() : "")
-				.set(INT + SAVE, chara.getIntelligence_save() != null ? chara.getIntelligence_save() : "")
-				.set(WIS + SAVE, chara.getWisdom_save() != null ? chara.getWisdom_save() : "")
-				.set(CHA + SAVE, chara.getCharisma_save() != null ? chara.getCharisma_save() : "")
-				.set(ACROBATICS, chara.getAcrobatics() != null ? chara.getAcrobatics() : "")
-				.set(ANIMAL, chara.getAnimal() != null ? chara.getAnimal() : "")
-				.set(ARCANA, chara.getArcana() != null ? chara.getArcana() : "")
-				.set(ATHLETICS, chara.getAthletics() != null ? chara.getAthletics() : "")
-				.set(DECEPTION, chara.getDeception() != null ? chara.getDeception() : "")
-				.set(HISTORY, chara.getHistory() != null ? chara.getHistory() : "")
-				.set(INTIMIDATION, chara.getIntimidation() != null ? chara.getIntimidation() : "")
-				.set(INSIGHT, chara.getInsight() != null ? chara.getInsight() : "")
-				.set(INVESTIGATION, chara.getInvestigation() != null ? chara.getInvestigation() : "")
-				.set(MEDICINE, chara.getMedicine() != null ? chara.getMedicine() : "")
-				.set(NATURE, chara.getNature() != null ? chara.getNature() : "")
-				.set(PERFORMANCE, chara.getPerformance() != null ? chara.getPerformance() : "")
-				.set(PERCEPTION, chara.getPerception() != null ? chara.getPerception() : "")
-				.set(PERSUASION, chara.getPersuasion() != null ? chara.getPersuasion() : "")
-				.set(RELIGION, chara.getReligion() != null ? chara.getReligion() : "")
-				.set(SLEIGHT, chara.getSleight() != null ? chara.getSleight() : "")
-				.set(STEALTH, chara.getStealth() != null ? chara.getStealth() : "")
-				.set(SURVIVAL, chara.getSurvival() != null ? chara.getSurvival() : "")
-				.set(PROFICIENCY_LANGUAGE, chara.getProficiency_language() != null ? chara.getProficiency_language() : "")
 				.set(AC, chara.getAc() != null ? chara.getAc() : 0)
 				.set(INITIATIVE, chara.getInitiative() != null ? chara.getInitiative() : 0)
 				.set(SPEED, chara.getSpeed() != null ? chara.getSpeed() : 0)
-				.set(HIT_DICE, chara.getHit_dice() != null ? chara.getHit_dice() : "")
 				.set(HIT_POINT, chara.getHit_point() != null ? chara.getHit_point() : 0)
-				.set(ATTACK_SPELLCASTING, chara.getAttack_spellcasting() != null ? chara.getAttack_spellcasting() : "")
-				.set(EQUIPMENT, chara.getEquipment() != null ? chara.getEquipment() : "")
-				.set(PERSONALITY_TRAITS, chara.getPersonality_traits() != null ? chara.getPersonality_traits() : "")
-				.set(IDEALS, chara.getIdeals() != null ? chara.getIdeals() : "")
-				.set(BONDS, chara.getBonds() != null ? chara.getBonds() : "")
-				.set(FLAWS, chara.getFlaws() != null ? chara.getFlaws() : "")
-				.set(FEATURES_TRAITS, chara.getFeatures_traits() != null ? chara.getFeatures_traits() : "")
-				.set(AGE, chara.getAge() != null ? chara.getAge() : "")
-				.set(HEIGHT, chara.getHeight() != null ? chara.getHeight() : "")
-				.set(WEIGHT, chara.getWeight() != null ? chara.getWeight() : "")
-				.set(EYES, chara.getEyes() != null ? chara.getEyes() : "")
-				.set(SKIN, chara.getSkin() != null ? chara.getSkin() : "")
-				.set(HAIR, chara.getHair() != null ? chara.getHair() : "")
-				.set(SPELLCASTING_ABILITY, chara.getSpellcasting_ability() != null ? chara.getSpellcasting_ability() : "")
-				.set(SPELLCASTING_CLASS, chara.getSpellcasting_class() != null ? chara.getSpellcasting_class() : "")
-				.set(SPELL_NOTE, chara.getSpell_note() != null ? chara.getSpell_note() : "")
 				.set(CACHE, chara.getCache() != null ? chara.getCache() : 0)
 				.set(DEFEATS, chara.getDefeats() != null ? chara.getDefeats() : 0)
 				.set(NPP, chara.getNpp() != null ? chara.getNpp() : 0)
-				.set(NOTE, chara.getNote() != null ? chara.getNote() : "")
 				.set(DELETED, chara.isDeleted() != null ? chara.isDeleted() : false)
 				.set(SPELL_SAVE_DC_MODIFIER, chara.getSpell_save_dc_modifier() != null ? chara.getSpell_save_dc_modifier() : 0)
 				.set(SPELL_ATTACK_BONUS_MODIFIER, chara.getSpell_attack_bonus_modifier() != null ? chara.getSpell_attack_bonus_modifier() : 0);
@@ -339,9 +367,9 @@ public class CharaController {
 	}
 
 	public String campaignNoteList(Model model, boolean showDeleted) {
+		// Do not orderBy("campaign_name"): entities with only campaign_name_BLOB would be excluded from index.
 		Query<Entity> q = Query.newEntityQueryBuilder()
 				.setKind("CampaignNote")
-				.addOrderBy(OrderBy.asc("campaign_name"))
 				.setLimit(PAGE_SIZE)
 				.build();
 
@@ -356,12 +384,15 @@ public class CharaController {
 			}
 			CampaignNote note = new CampaignNote();
 			note.setKey(entity.getKey().toUrlSafe());
-			note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
-			note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
-			note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+			note.setCampaign_name(getStringFromBlobOrLegacy(entity, CAMPAIGN_NAME));
+			note.setTitle(getStringFromBlobOrLegacy(entity, CAMPAIGN_NOTE_TITLE));
+			note.setNote(getStringFromBlobOrLegacy(entity, CAMPAIGN_NOTE));
 			note.setDeleted(getBooleanProperty(entity, DELETED));
 			notes.add(note);
 		}
+		notes.sort(java.util.Comparator
+				.comparing(CampaignNote::getCampaign_name, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))
+				.thenComparing(CampaignNote::getTitle, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())));
 
 		model.addAttribute("notes", notes);
 		model.addAttribute("showDeleted", showDeleted);
@@ -387,12 +418,12 @@ public class CharaController {
 
 		if (isNew) {
 			Key key = _datastore.allocateId(_noteKeyFactory.newKey());
-			Entity entity = Entity.newBuilder(key)
-					.set(CAMPAIGN_NAME, note.getCampaign_name() != null ? note.getCampaign_name() : "")
-					.set(CAMPAIGN_NOTE_TITLE, note.getTitle() != null ? note.getTitle() : "")
-					.set(CAMPAIGN_NOTE, note.getNote() != null ? note.getNote() : "")
-					.set(DELETED, note.isDeleted() != null ? note.isDeleted() : false)
-					.build();
+			Entity.Builder b = Entity.newBuilder(key);
+			setStringToBlob(b, CAMPAIGN_NAME, note.getCampaign_name());
+			setStringToBlob(b, CAMPAIGN_NOTE_TITLE, note.getTitle());
+			setStringToBlob(b, CAMPAIGN_NOTE, note.getNote());
+			b.set(DELETED, note.isDeleted() != null ? note.isDeleted() : false);
+			Entity entity = b.build();
 			_datastore.put(entity);
 			note.setKey(entity.getKey().toUrlSafe());
 		} else {
@@ -400,12 +431,12 @@ public class CharaController {
 			if (entity == null) {
 				return campaignNoteList(model);
 			}
-			Entity updated = Entity.newBuilder(entity)
-					.set(CAMPAIGN_NAME, note.getCampaign_name() != null ? note.getCampaign_name() : "")
-					.set(CAMPAIGN_NOTE_TITLE, note.getTitle() != null ? note.getTitle() : "")
-					.set(CAMPAIGN_NOTE, note.getNote() != null ? note.getNote() : "")
-					.set(DELETED, note.isDeleted() != null ? note.isDeleted() : false)
-					.build();
+			Entity.Builder b = Entity.newBuilder(entity.getKey());
+			setStringToBlob(b, CAMPAIGN_NAME, note.getCampaign_name());
+			setStringToBlob(b, CAMPAIGN_NOTE_TITLE, note.getTitle());
+			setStringToBlob(b, CAMPAIGN_NOTE, note.getNote());
+			b.set(DELETED, note.isDeleted() != null ? note.isDeleted() : false);
+			Entity updated = b.build();
 			_datastore.put(updated);
 			note.setKey(updated.getKey().toUrlSafe());
 		}
@@ -430,9 +461,9 @@ public class CharaController {
 			return "campaign_note_edit";
 		}
 		note.setKey(entity.getKey().toUrlSafe());
-		note.setCampaign_name(getStrProperty(entity, CAMPAIGN_NAME));
-		note.setTitle(getStrProperty(entity, CAMPAIGN_NOTE_TITLE));
-		note.setNote(getStrProperty(entity, CAMPAIGN_NOTE));
+		note.setCampaign_name(getStringFromBlobOrLegacy(entity, CAMPAIGN_NAME));
+		note.setTitle(getStringFromBlobOrLegacy(entity, CAMPAIGN_NOTE_TITLE));
+		note.setNote(getStringFromBlobOrLegacy(entity, CAMPAIGN_NOTE));
 		note.setDeleted(getBooleanProperty(entity, DELETED));
 		return "campaign_note_edit";
 	}
