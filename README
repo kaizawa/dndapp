@@ -43,7 +43,7 @@ Set CLOUDSDK_CORE_DISABLE_PROMPTS=1 so gcloud does not wait for "y/N".
    $ gcloud app deploy target/appengine-staging --project dndtool-227201
 
 One-liner (with JDK 17 and no prompts):
-   $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests -P gae-executable
+   $ JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home mvn clean package -DskipTests -P gae-executable
    $ CLOUDSDK_CORE_DISABLE_PROMPTS=1 gcloud app deploy target/appengine-staging --project dndtool-227201 
 
 Show log
