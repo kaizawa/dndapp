@@ -2,10 +2,13 @@ package com.cafeform.dndapp;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.cafeform.dndapp.Constants.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +26,8 @@ import com.google.cloud.datastore.QueryResults;
 
 @Controller
 public class CharaController {
+
+	private static final Logger log = LoggerFactory.getLogger(CharaController.class);
 
 	private final Datastore _datastore;
 	private final KeyFactory _charaKeyFactory;
@@ -65,7 +70,7 @@ public class CharaController {
 			updatePlayerChara(chara, charaData);
 			charas.add(chara);
 		}
-		charas.sort(java.util.Comparator.comparing(Chara::getName, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())));
+		charas.sort(Comparator.comparing(Chara::getName, Comparator.nullsFirst(Comparator.naturalOrder())));
 
 		model.addAttribute("charas", charas);
 		model.addAttribute("showDeleted", showDeleted);
@@ -189,7 +194,7 @@ public class CharaController {
 					if (!decoded.isEmpty()) return decoded;
 				}
 			} catch (Exception e) {
-				// fall through to legacy
+				log.warn("Failed to read BLOB property {}, falling back to legacy: {}", blobProp, e.getMessage());
 			}
 		}
 		return getStrProperty(entity, prop);
@@ -390,9 +395,9 @@ public class CharaController {
 			note.setDeleted(getBooleanProperty(entity, DELETED));
 			notes.add(note);
 		}
-		notes.sort(java.util.Comparator
-				.comparing(CampaignNote::getCampaign_name, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))
-				.thenComparing(CampaignNote::getTitle, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())));
+		notes.sort(Comparator
+				.comparing(CampaignNote::getCampaign_name, Comparator.nullsFirst(Comparator.naturalOrder()))
+				.thenComparing(CampaignNote::getTitle, Comparator.nullsFirst(Comparator.naturalOrder())));
 
 		model.addAttribute("notes", notes);
 		model.addAttribute("showDeleted", showDeleted);
@@ -431,7 +436,7 @@ public class CharaController {
 			if (entity == null) {
 				return campaignNoteList(model);
 			}
-			Entity.Builder b = Entity.newBuilder(entity.getKey());
+			Entity.Builder b = Entity.newBuilder(entity);
 			setStringToBlob(b, CAMPAIGN_NAME, note.getCampaign_name());
 			setStringToBlob(b, CAMPAIGN_NOTE_TITLE, note.getTitle());
 			setStringToBlob(b, CAMPAIGN_NOTE, note.getNote());
