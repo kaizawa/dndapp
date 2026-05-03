@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Character Detail</title>
-<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -59,24 +59,24 @@
                   th:href=@{/chara_edit(charaKey=*{charaKey})}>編集する</a></td>
               </tr>
               <tr>
-                <td id="name"><label class="control-label">キャラクター名</label>
+                <td id="name"><label class="form-label">キャラクター名</label>
                   <p th:text="*{name}" class="value" /></td>
                 <td>
                   <table class="table ">
                     <tr>
-                      <td><label class="control-label">クラス</label>
+                      <td><label class="form-label">クラス</label>
                         <p class="value" th:text="*{klass}" /></td>
-                      <td><label class="control-label">レベル</label>
+                      <td><label class="form-label">レベル</label>
                         <p class="value" th:text="*{level}" /></td>
-                      <td><label class="control-label">プレイヤー</label>
+                      <td><label class="form-label">プレイヤー</label>
                         <p class="value" th:text="*{player}" /></td>
                     </tr>
                     <tr>
-                      <td><label class="control-label">種族</label>
+                      <td><label class="form-label">種族</label>
                         <p class="value" th:text="*{race}" /></td>
-                      <td><label class="control-label">属性</label>
+                      <td><label class="form-label">属性</label>
                         <p class="value" th:text="*{alignment}" /></td>
-                      <td><label class="control-label">経験値</label>
+                      <td><label class="form-label">経験値</label>
                         <p class="value" th:text="*{experience}" /></td>
                     </tr>
                   </table>
@@ -100,42 +100,42 @@
                                 style="text-align: center">
                                 <tr>
                                   <td id="str"><label
-                                    class="control-label">【筋力】</label>
+                                    class="form-label">【筋力】</label>
                                     <p class="value"
                                       th:text="*{strength}" /> <span
                                     th:text="*{strength_bonus} &gt; 0? '(+' + *{strength_bonus} + ')':  '(' + *{strength_bonus} + ')'"></span></td>
                                 </tr>
                                 <tr>
                                   <td id="dex"><label
-                                    class="control-label">【敏捷力】</label>
+                                    class="form-label">【敏捷力】</label>
                                     <p class="value"
                                       th:text="*{dexterity}" /> <span
                                     th:text="*{dexterity_bonus} &gt; 0? '(+' + *{dexterity_bonus} + ')':  '(' + *{dexterity_bonus} + ')'"></span></td>
                                 </tr>
                                 <tr>
                                   <td id="con"><label
-                                    class="control-label">【耐久力】</label>
+                                    class="form-label">【耐久力】</label>
                                     <p class="value"
                                       th:text="*{constitution}" /> <span
                                     th:text="*{constitution_bonus} &gt; 0? '(+' + *{constitution_bonus} + ')':  '(' + *{constitution_bonus} + ')'"></span></td>
                                 </tr>
                                 <tr>
                                   <td id="int"><label
-                                    class="control-label">【知力】</label>
+                                    class="form-label">【知力】</label>
                                     <p class="value"
                                       th:text="*{intelligence}" /> <span
                                     th:text="*{intelligence_bonus} &gt; 0? '(+' + *{intelligence_bonus} + ')':  '(' + *{intelligence_bonus} + ')'"></span></td>
                                 </tr>
                                 <tr>
                                   <td id="wis"><label
-                                    class="control-label">【判断力】</label>
+                                    class="form-label">【判断力】</label>
                                     <p class="value" th:text="*{wisdom}" />
                                     <span
                                     th:text="*{wisdom_bonus} &gt; 0? '(+' + *{wisdom_bonus} + ')':  '(' + *{wisdom_bonus} + ')'"></span></td>
                                 </tr>
                                 <tr>
                                   <td id="char"><label
-                                    class="control-label">【魅力】</label>
+                                    class="form-label">【魅力】</label>
                                     <p class="value"
                                       th:text="*{charisma}" /> <span
                                     th:text="*{charisma_bonus} &gt; 0? '(+' + *{charisma_bonus} + ')':  '(' + *{charisma_bonus} + ')'"></span></td>
@@ -155,7 +155,7 @@
                                     <table>
                                       <tr>
                                         <td><label
-                                          class="control-label">習熟ボーナス</label>
+                                          class="form-label">習熟ボーナス</label>
                                           <p class="value"
                                             th:text="*{proficiency_bonus} &gt; 0? '+' + *{proficiency_bonus} :  *{proficiency_bonus}" />
                                         </td>
@@ -354,7 +354,7 @@
                       <td id="passive value">
                         <table class="table">
                           <tr>
-                            <td><label class="control-label">受動【判断力】&lt;知覚&gt;値</label>
+                            <td><label class="form-label">受動【判断力】&lt;知覚&gt;値</label>
                               <p class="value"
                                 th:text="*{passive_wisdom_perception}" /></td>
                           </tr>
@@ -375,11 +375,11 @@
                       <td>
                         <table class="table">
                           <tr>
-                            <td><label class="control-label">AC</label>
+                            <td><label class="form-label">AC</label>
                               <p class="value"
                                 style="text-align: center"
                                 th:text="*{ac}" /></td>
-                            <td><label class="control-label">イニシアチブ</label>
+                            <td><label class="form-label">イニシアチブ</label>
                               <p class="value"
                                 style="text-align: center"
                                 th:text="*{initiative}" /></td>
@@ -391,13 +391,13 @@
                       <td>
                         <table class="table">
                           <tr>
-                            <td><label class="control-label">移動速度</label>
+                            <td><label class="form-label">移動速度</label>
                               <p class="value"
                                 style="text-align: center"
                                 th:text="*{speed}" /></td>
-                            <td><label class="control-label">ヒットダイス</label>
+                            <td><label class="form-label">ヒットダイス</label>
                               <p class="value" th:text="*{hit_dice}" /></td>
-                            <td><label class="control-label">ヒットポイント</label>
+                            <td><label class="form-label">ヒットポイント</label>
                               <p class="value"
                                 style="text-align: center"
                                 th:value="*{hit_point}" /></td>
@@ -460,13 +460,13 @@
           <td>
             <table class="table">
               <tr>
-                <td><label class="control-label">呪文発動クラス</label>
+                <td><label class="form-label">呪文発動クラス</label>
                   <p class="value" th:text="*{spellcasting_class}" /></td>
-                <td><label class="control-label">呪文発動能力値</label>
+                <td><label class="form-label">呪文発動能力値</label>
                   <p class="value" th:text="*{spellcasting_ability}" /></td>
-                <td><label class="control-label">呪文セーヴ難易度</label>
+                <td><label class="form-label">呪文セーヴ難易度</label>
                   <p class="value" th:text="*{spell_save_dc}" /></td>
-                <td><label class="control-label">呪文攻撃ボーナス</label>
+                <td><label class="form-label">呪文攻撃ボーナス</label>
                   <p class="value" th:text="*{spell_attack_bonus}" /></td>
               </tr>
             </table>
@@ -480,19 +480,19 @@
                 <td>
                   <table class="table">
                     <tr>
-                      <td><label class="control-label">年齢</label>
+                      <td><label class="form-label">年齢</label>
                         <p class="value" th:text="*{age}" /></td>
-                      <td><label class="control-label">身長</label>
+                      <td><label class="form-label">身長</label>
                         <p class="value" th:text="*{height}" /></td>
-                      <td><label class="control-label">体重</label>
+                      <td><label class="form-label">体重</label>
                         <p class="value" th:text="*{weight}" /></td>
                     </tr>
                     <tr>
-                      <td><label class="control-label">目</label>
+                      <td><label class="form-label">目</label>
                         <p class="value" th:text="*{eyes}" /></td>
-                      <td><label class="control-label">肌</label>
+                      <td><label class="form-label">肌</label>
                         <p class="value" th:text="*{skin}" /></td>
-                      <td><label class="control-label">髪</label>
+                      <td><label class="form-label">髪</label>
                         <p class="value" th:text="*{hair}" /></td>
                     </tr>
                   </table>

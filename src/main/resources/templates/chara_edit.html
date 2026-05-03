@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Character Detail</title>
-<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -53,7 +53,7 @@
               value="" th:value="*{race}" />
           </div>
           <div class="col-3">
-            属性 <select class="form-control" name="alignment">
+            属性 <select class="form-select" name="alignment">
               <option value="">---</option>
               <option th:value="秩序にして善" th:text="秩序にして善"
                 th:selected="'秩序にして善' == *{alignment}"></option>
@@ -102,7 +102,7 @@
               <p>
               <div class="text-center">
                 <div class="col" id="str">
-                  <label class="control-label" for="str_input">【筋力】<span th:text="*{strength_bonus} &gt; 0? '(+' + *{strength_bonus} + ')':  '(' + *{strength_bonus} + ')'"></span></label>
+                  <label class="form-label" for="str_input">【筋力】<span th:text="*{strength_bonus} &gt; 0? '(+' + *{strength_bonus} + ')':  '(' + *{strength_bonus} + ')'"></span></label>
                   <input class="form-control" id="str_input"
                     name="strength" type="text" size=1 value=""
                     style="text-align: center" th:value="*{strength}" />
@@ -111,7 +111,7 @@
                 <div class="w-100"></div>
 
                 <div class="col" id="dex">
-                  <label class="control-label" for="dex_input">【敏捷力】<span th:text="*{dexterity_bonus} &gt; 0? '(+' + *{dexterity_bonus} + ')':  '(' + *{dexterity_bonus} + ')'"></span></label>
+                  <label class="form-label" for="dex_input">【敏捷力】<span th:text="*{dexterity_bonus} &gt; 0? '(+' + *{dexterity_bonus} + ')':  '(' + *{dexterity_bonus} + ')'"></span></label>
                   <input class="form-control" id="dex_input"
                     name="dexterity" type="text" size=1 value=""
                     style="text-align: center" th:value="*{dexterity}" />
@@ -120,7 +120,7 @@
                 <div class="w-100"></div>
 
                 <div class="col" id="con">
-                  <label class="control-label" for="con_input">【耐久力】<span th:text="*{constitution_bonus} &gt; 0? '(+' + *{constitution_bonus} + ')':  '(' + *{constitution_bonus} + ')'"></span></label>
+                  <label class="form-label" for="con_input">【耐久力】<span th:text="*{constitution_bonus} &gt; 0? '(+' + *{constitution_bonus} + ')':  '(' + *{constitution_bonus} + ')'"></span></label>
                   <input class="form-control" id="con_input"
                     name="constitution" type="text" size=1 value=""
                     style="text-align: center"
@@ -130,7 +130,7 @@
                 <div class="w-100"></div>
 
                 <div class="col" id="int">
-                  <label class="control-label" for="int_input">【知力】<span th:text="*{intelligence_bonus} &gt; 0? '(+' + *{intelligence_bonus} + ')':  '(' + *{intelligence_bonus} + ')'"></span></label>
+                  <label class="form-label" for="int_input">【知力】<span th:text="*{intelligence_bonus} &gt; 0? '(+' + *{intelligence_bonus} + ')':  '(' + *{intelligence_bonus} + ')'"></span></label>
                   <input class="form-control" id="int_input"
                     name="intelligence" type="text" size=1 value=""
                     style="text-align: center"
@@ -140,7 +140,7 @@
                 <div class="w-100"></div>
 
                 <div class="col" id="wis">
-                  <label class="control-label" for="wis_input">【判断力】<span th:text="*{wisdom_bonus} &gt; 0? '(+' + *{wisdom_bonus} + ')':  '(' + *{wisdom_bonus} + ')'"></span></label>
+                  <label class="form-label" for="wis_input">【判断力】<span th:text="*{wisdom_bonus} &gt; 0? '(+' + *{wisdom_bonus} + ')':  '(' + *{wisdom_bonus} + ')'"></span></label>
                   <input class="form-control" id="wis_input"
                     name="wisdom" type="text" size=1 value=""
                     style="text-align: center" th:value="*{wisdom}" />
@@ -149,7 +149,7 @@
                 <div class="w-100"></div>
 
                 <div class="col" id="char">
-                  <label class="control-label" for="char_input">【魅力】<span th:text="*{charisma_bonus} &gt; 0? '(+' + *{charisma_bonus} + ')':  '(' + *{charisma_bonus} + ')'"></span></label>
+                  <label class="form-label" for="char_input">【魅力】<span th:text="*{charisma_bonus} &gt; 0? '(+' + *{charisma_bonus} + ')':  '(' + *{charisma_bonus} + ')'"></span></label>
                   <input class="form-control" id="char_input"
                     name="charisma" type="text" size=1 value=""
                     style="text-align: center" th:value="*{charisma}" />
@@ -249,7 +249,7 @@
               </div>
 
               <div class="col">
-                ヒットダイス <select class="form-control" name="hit_dice">
+                ヒットダイス <select class="form-select" name="hit_dice">
                   <option value="">---</option>
                   <option th:value="d4" th:text="d4"
                     th:selected="'d4' == *{hit_dice}"></option>
@@ -433,7 +433,7 @@
               th:value="*{spellcasting_class}" />
           </div>
           <div class="col">
-            呪文発動能力 <select class="form-control"
+            呪文発動能力 <select class="form-select"
               name="spellcasting_ability">
               <option value="">---</option>
               <option th:value="知力" th:text="知力"
