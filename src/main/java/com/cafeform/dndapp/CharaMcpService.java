@@ -33,7 +33,8 @@ public class CharaMcpService {
 
     @Tool(description = "Look up a D&D character by name and return their full character sheet. "
             + "The name can be in Japanese (e.g. セルシウス) or English. "
-            + "Returns all stats: abilities, combat, saving throws, skills, spellcasting, equipment, personality, and physical description.")
+            + "Returns all stats: abilities, combat, saving throws, skills, spellcasting, equipment, personality, and physical description.",
+            resultConverter = PlainStringConverter.class)
     public String getCharacterByName(String name) {
         if (name == null || name.trim().isEmpty()) {
             return "Error: character name must not be empty.";
@@ -52,7 +53,8 @@ public class CharaMcpService {
     // --- Tool 2: List all characters ---
 
     @Tool(description = "List all D&D characters with a brief summary (name, class, level, race, player). "
-            + "Use this to discover available character names before calling getCharacterByName.")
+            + "Use this to discover available character names before calling getCharacterByName.",
+            resultConverter = PlainStringConverter.class)
     public String listCharacters() {
         List<Entity> all = queryAllCharacters();
         if (all.isEmpty()) return "No characters found.";
@@ -70,7 +72,8 @@ public class CharaMcpService {
 
     @Tool(description = "Search D&D characters by class, race, and/or level range. "
             + "All parameters are optional — omit or pass empty string / 0 to skip that filter. "
-            + "Returns a summary list of matching characters.")
+            + "Returns a summary list of matching characters.",
+            resultConverter = PlainStringConverter.class)
     public String searchCharacters(String className, String race, int minLevel, int maxLevel) {
         List<Entity> all = queryAllCharacters();
         List<Entity> matched = new ArrayList<>();
@@ -96,7 +99,8 @@ public class CharaMcpService {
     // --- Tool 4: List campaign notes ---
 
     @Tool(description = "List all campaign notes with their campaign name and title. "
-            + "Use this to discover note titles before calling getCampaignNoteByTitle.")
+            + "Use this to discover note titles before calling getCampaignNoteByTitle.",
+            resultConverter = PlainStringConverter.class)
     public String listCampaignNotes() {
         List<Entity> all = queryAllNotes();
         if (all.isEmpty()) return "No campaign notes found.";
@@ -113,7 +117,8 @@ public class CharaMcpService {
     // --- Tool 5: Get campaign note by title ---
 
     @Tool(description = "Retrieve the full content of a campaign note by its title. "
-            + "Use listCampaignNotes first to find available titles.")
+            + "Use listCampaignNotes first to find available titles.",
+            resultConverter = PlainStringConverter.class)
     public String getCampaignNoteByTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             return "Error: title must not be empty.";

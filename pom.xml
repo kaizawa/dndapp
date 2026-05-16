@@ -102,7 +102,8 @@
 										<property name="staging.dir" value="${project.build.directory}/appengine-staging"/>
 										<mkdir dir="${staging.dir}"/>
 										<copy file="${project.build.directory}/${project.build.finalName}.war" todir="${staging.dir}" failonerror="true"/>
-										<echo file="${staging.dir}/app.yaml" message="runtime: java17${line.separator}entrypoint: java -Dserver.port=$$PORT -jar ${project.build.finalName}.war${line.separator}"/>
+										<echo file="${staging.dir}/app.yaml" message="runtime: custom${line.separator}env: flex${line.separator}"/>
+											<echo file="${staging.dir}/Dockerfile" message="FROM eclipse-temurin:21-jre${line.separator}COPY ${project.build.finalName}.war /app.war${line.separator}EXPOSE 8080${line.separator}ENTRYPOINT [&quot;java&quot;, &quot;-Dserver.port=8080&quot;, &quot;-jar&quot;, &quot;/app.war&quot;]${line.separator}"/>
 									</target>
 								</configuration>
 							</execution>
