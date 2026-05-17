@@ -1,93 +1,50 @@
-Requirements: JDK 17 or later (Java 8 deprecated on App Engine Jan 2026)
+Build
+------------------
+cd ~/src/dndapp
+mvn package -P gae-executable -DskipTests
+Output: target/dndapp-15.war
 
-Google App Engine doc
-https://cloud.google.com/appengine/docs/standard/java/how-to
 
-Thymeleaf ja doc
-https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html
+Deploy to App Engine (Web UI)
+--------------------------------
+cd ~/src/dndapp
 
-Run App on local
------------------
-This app uses Google Cloud Datastore. For local run you must use the Datastore emulator
-(otherwise the app will try to use real GCP and require valid credentials).
-You must set DATASTORE_EMULATOR_HOST so the app uses the emulator without real OAuth credentials.
+mvn package -P gae-executable -DskipTests
 
-1. Start the Datastore emulator (in a separate terminal):
-   $ gcloud beta emulators datastore start --host-port=localhost:8081
+# Must delete these files — otherwise Spring Boot won't start
+rm -f target/appengine-staging/WEB-INF/quickstart-web.xml \
+      target/appengine-staging/WEB-INF/min-quickstart-web.xml
 
-2. Build and run the app with the emulator (env vars must be set in the same shell as the java command):
-   $ export DATASTORE_EMULATOR_HOST=localhost:8081
-   $ export GOOGLE_CLOUD_PROJECT=dndapp
-   $ JAVA_HOME=/opt/homebrew/opt/openjdk@21 java -jar target/dndapp-15.war
+gcloud app deploy target/appengine-staging \
+  --project=dndtool-227201 \
+  --quiet
+URL: https://dndtool-227201.appspot.com/
 
-   Or as a single line so the env vars are always set:
-   $ DATASTORE_EMULATOR_HOST=localhost:8081 GOOGLE_CLOUD_PROJECT=dndapp JAVA_HOME=/opt/homebrew/opt/openjdk@21 -jar target/dndapp-15.war
 
-   (Adjust JAVA_HOME if your JDK 17 is elsewhere; e.g. macOS Homebrew: /usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home)
+Deploy to Cloud Run (MCP Server)
+--------------------------------
+cd ~/src/dndapp
 
-3. Open http://localhost:8080/
+mvn package -P gae-executable -DskipTests
 
-Build (without running):
-   $ JAVA_HOME=/path/to/jdk17 mvn clean package -DskipTests
+cp target/dndapp-15.war /tmp/cloudrun-build/dndapp-15.war
 
-Deploy App to GAE (use JDK 17)
-------------------------------
-New deployments must use the executable-WAR flow so the app serves correctly (avoid 404 on new versions).
-Set CLOUDSDK_CORE_DISABLE_PROMPTS=1 so gcloud does not wait for "y/N".
+gcloud run deploy dndapp \
+  --source /tmp/cloudrun-build \
+  --region=us-central1 \
+  --project=dndtool-227201 \
+  --session-affinity \
+  --timeout=3600 \
+  --max-instances=1 \
+  --set-env-vars=SPRING_AI_MCP_SERVER_ENABLED=true \
+  --quiet
+URL: https://dndapp-360244136999.us-central1.run.app
 
-1. Build and stage (profile gae-executable stages WAR + app.yaml with entrypoint):
-   $ mvn clean package -DskipTests -P gae-executable
 
-2. Deploy the staging directory (do not use mvn appengine:deploy; that uses the old staging and can 404):
-   $ export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-   $ gcloud app deploy target/appengine-staging --project dndtool-227201
-
-One-liner (with JDK 17 and no prompts):
-   $ JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home mvn clean package -DskipTests -P gae-executable
-   $ CLOUDSDK_CORE_DISABLE_PROMPTS=1 gcloud app deploy target/appengine-staging --project dndtool-227201 
-
-Show log
-$ gcloud app logs tail
-
-Spring Frame work Book 
-https://books.google.co.jp/books?id=7TesDAAAQBAJ&printsec=frontcover&hl=ja&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false
-P34 @SessionAttribute
-
-acrobatics
-animal
-arcana
-athletics
-deception
-history
-intimidation
-insight
-investigation
-medicine
-nature
-performance
-perception
-persuasion
-religion
-sleight
-stealth
-survival
-
-s_acrobatics
-s_animal
-s_arcana
-s_athletics
-s_deception
-s_history
-s_intimidation
-s_insight
-s_investigation
-s_medicine
-s_nature
-s_performance
-s_perception
-s_persuasion
-s_religion
-s_sleight
-s_stealth
-s_survival
-
+Note
+-----------------------------
+\App Engine	Cloud Run
+Purpose	Web UI	MCP server for Claude Desktop
+MCP enabled	No	Yes (via env var)
+Why delete quickstart-web.xml	App Engine staging generates this file which disables Spring Boot's servlet initializer	N/A
+Why /tmp/cloudrun-build	Contains a Dockerfile that wraps the WAR with Java 21	—
